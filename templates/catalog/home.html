@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home | Beauty Store
+{% endblock %}
+
+{% block content %}
+<h1>Beauty Store</h1>
+
+<h2>Popular Products</h2>
+
+{% for product in products %}
+  <div>
+    <h3>{{ product.name }}</h3>
+    <p>{{ product.description }}</p>
+    <strong>${{ product.price }}</strong>
+  </div>
+{% empty %}
+  <p>No products yet.</p>
+{% endfor %}
+{% endblock %}
