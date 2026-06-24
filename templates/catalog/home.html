@@ -5,17 +5,41 @@ Home | Beauty Store
 {% endblock %}
 
 {% block content %}
-<h1>Beauty Store</h1>
+<section class="bg-light py-5">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold">Beauty Store</h1>
+        <p class="lead mt-3">
+            Discover cosmetics for your daily beauty routine.
+        </p>
+        <a href="#" class="btn btn-dark btn-lg mt-3">Shop now</a>
+    </div>
+</section>
 
-<h2>Popular Products</h2>
+<section class="container mt-5">
+    <h2 class="mb-4">Popular Products</h2>
 
-{% for product in products %}
-  <div>
-    <h3>{{ product.name }}</h3>
-    <p>{{ product.description }}</p>
-    <strong>${{ product.price }}</strong>
-  </div>
-{% empty %}
-  <p>No products yet.</p>
-{% endfor %}
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}"
+                             class="card-img-top"
+                             alt="{{ product.name }}">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">
+                            {{ product.description|truncatewords:15 }}
+                        </p>
+                        <p class="fw-bold">${{ product.price }}</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>No products yet.</p>
+        {% endfor %}
+    </div>
+</section>
 {% endblock %}
