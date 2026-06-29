@@ -5,389 +5,689 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if tab == "register" %}Create Account{% else %}Login{% endif %} | Beauty Store</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        *:focus { outline: none; }
+
         html, body {
-            margin: 0; padding: 0;
-            overflow: hidden; height: 100%;
+            width: 100%;
+            min-height: 100%;
+            margin: 0;
         }
 
-        /* ── Aurora bg ── */
-        #aurora-bg {
-            position: fixed; inset: 0; z-index: 0;
-            transition: opacity .5s;
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            background: #f5ecdf;
+            font-family: Georgia, "Times New Roman", serif;
+            transition: background .35s ease;
         }
 
-        /* ── Light bg ── */
-        #light-bg {
-            position: fixed; inset: 0; z-index: 0;
-            background: linear-gradient(135deg, #fdf2e9 0%, #fce4d6 50%, #f0d8f0 100%);
-            opacity: 0;
-            transition: opacity .5s;
+        body::before {
+            content: "";
+            position: fixed;
+            inset: -8%;
+            background:
+                linear-gradient(90deg, rgba(245,236,223,.9) 0%, rgba(245,236,223,.54) 42%, rgba(255,255,255,.86) 100%),
+                url("{% static 'images/auth-beauty-branding.png' %}") center/cover no-repeat;
+            filter: blur(16px);
+            opacity: .42;
+            transform: scale(1.04);
+            z-index: 0;
+            pointer-events: none;
+            transition: opacity .35s ease, filter .35s ease;
         }
 
-        [data-auth-theme="light"] #aurora-bg { opacity: 0; pointer-events: none; }
-        [data-auth-theme="light"] #light-bg  { opacity: 1; }
-
-        /* ── Layout ── */
-        .auth-wrap {
-            position: fixed; inset: 0; z-index: 10;
-            display: flex; align-items: center; justify-content: center;
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 26% 18%, rgba(255,255,255,.72), transparent 28%),
+                radial-gradient(circle at 78% 76%, rgba(200,169,110,.18), transparent 32%),
+                linear-gradient(135deg, rgba(255,249,241,.82), rgba(238,224,204,.76));
+            z-index: 0;
+            pointer-events: none;
         }
 
-        /* ── Card ── */
-        .auth-card {
-            width: 100%; max-width: 440px;
-            border-radius: 22px;
-            padding: 2.5rem 2.75rem;
-            transition: background .4s, border-color .4s, box-shadow .4s;
+        [data-auth-theme="dark"] body { background: #17130f; }
+
+        [data-auth-theme="dark"] body::before {
+            background:
+                linear-gradient(90deg, rgba(19,15,12,.92) 0%, rgba(31,24,18,.68) 46%, rgba(15,13,12,.88) 100%),
+                url("{% static 'images/auth-beauty-branding.png' %}") center/cover no-repeat;
+            filter: blur(18px) saturate(.72);
+            opacity: .3;
         }
 
-        [data-auth-theme="dark"] .auth-card {
-            background: rgba(10, 10, 20, 0.58);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255,255,255,0.14);
-            box-shadow: 0 8px 60px rgba(0,0,0,0.55);
+        [data-auth-theme="dark"] body::after {
+            background:
+                radial-gradient(circle at 24% 18%, rgba(200,169,110,.16), transparent 30%),
+                radial-gradient(circle at 78% 74%, rgba(255,255,255,.06), transparent 32%),
+                linear-gradient(135deg, rgba(16,13,11,.84), rgba(42,31,23,.78));
         }
 
-        [data-auth-theme="light"] .auth-card {
-            background: rgba(255,255,255,0.82);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255,255,255,0.9);
-            box-shadow: 0 8px 50px rgba(0,0,0,0.12);
+        [data-auth-theme="light"] body {
+            background: #f5ecdf;
         }
 
-        /* ── Brand ── */
-        .auth-brand {
-            font-family: var(--font-serif);
-            font-size: .82rem; font-weight: 700;
-            letter-spacing: .14em; text-transform: uppercase;
-            text-decoration: none; display: block;
-            margin-bottom: 1.75rem;
-            transition: color .4s;
-        }
-        [data-auth-theme="dark"] .auth-brand { color: rgba(255,255,255,0.4); }
-        [data-auth-theme="light"] .auth-brand { color: var(--color-accent); }
-
-        /* ── Tabs ── */
-        .auth-tabs {
-            display: flex; gap: .25rem;
-            margin-bottom: 1.75rem;
-            border-radius: 10px; padding: 4px;
-            transition: background .4s;
-        }
-        [data-auth-theme="dark"] .auth-tabs  { background: rgba(255,255,255,0.07); }
-        [data-auth-theme="light"] .auth-tabs  { background: rgba(0,0,0,0.06); }
-
-        .auth-tab {
-            flex: 1; text-align: center;
-            padding: .55rem; border-radius: 7px;
-            font-size: .88rem; font-weight: 600;
-            cursor: pointer; text-decoration: none;
-            transition: background .25s, color .25s, box-shadow .25s;
-        }
-
-        [data-auth-theme="dark"] .auth-tab        { color: rgba(255,255,255,0.4); }
-        [data-auth-theme="dark"] .auth-tab.active {
-            background: rgba(255,255,255,0.12);
-            color: #fff;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.3);
-        }
-
-        [data-auth-theme="light"] .auth-tab        { color: #1a1a1a; }
-        [data-auth-theme="light"] .auth-tab.active {
+        .auth-shell {
+            width: min(100%, 736px);
+            height: min(72vh, 545px);
+            min-height: 520px;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+            border-radius: 14px;
             background: #fff;
-            color: #1a1a1a;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 18px 55px rgba(55,38,20,.16);
+            transition: background .35s ease, box-shadow .35s ease;
+            z-index: 1;
         }
 
-        /* ── Form panels ── */
-        .auth-panel { display: none; }
-        .auth-panel.active { display: block; }
+        [data-auth-theme="dark"] .auth-shell {
+            background: #f7f3ee;
+            box-shadow: 0 20px 70px rgba(0,0,0,.34);
+        }
 
-        /* ── Labels ── */
-        .auth-label {
-            display: block; font-size: .8rem; font-weight: 600;
-            margin-bottom: .35rem; letter-spacing: .04em;
-            transition: color .4s;
-        }
-        [data-auth-theme="dark"] .auth-label { color: rgba(255,255,255,0.55); }
-        [data-auth-theme="light"] .auth-label { color: #1a1a1a; }
-
-        /* ── Inputs ── */
-        .auth-input {
-            width: 100%; padding: .7rem .95rem;
-            border-radius: 10px; font-size: .95rem;
-            outline: none; box-sizing: border-box;
-            transition: border-color .2s, background .2s, color .4s;
-        }
-        [data-auth-theme="dark"] .auth-input {
-            background: rgba(255,255,255,0.07);
-            border: 1.5px solid rgba(255,255,255,0.12);
-            color: #fff;
-        }
-        [data-auth-theme="dark"] .auth-input:focus {
-            border-color: rgba(255,255,255,0.38);
-            background: rgba(255,255,255,0.11);
-        }
-        [data-auth-theme="dark"] .auth-input::placeholder { color: rgba(255,255,255,0.2); }
-
-        [data-auth-theme="light"] .auth-input {
+        [data-auth-theme="light"] .auth-shell {
             background: #fff;
-            border: 1.5px solid #e0d8d0;
-            color: #1a1a1a;
-        }
-        [data-auth-theme="light"] .auth-input:focus {
-            border-color: var(--color-accent);
-            box-shadow: 0 0 0 3px rgba(201,169,110,.15);
-        }
-        [data-auth-theme="light"] .auth-input::placeholder { color: #bbb; }
-
-        .auth-input.is-invalid { border-color: #e74c3c !important; }
-        .field-err { font-size: .78rem; color: #e74c3c; margin-top: .25rem; }
-
-        /* ── Submit button ── */
-        .auth-btn {
-            width: 100%; padding: .78rem; border: none;
-            border-radius: 10px; font-size: .95rem; font-weight: 600;
-            cursor: pointer; margin-top: .25rem;
-            transition: opacity .2s, transform .15s, background .4s, color .4s;
-        }
-        .auth-btn:hover { opacity: .9; transform: translateY(-1px); }
-        [data-auth-theme="dark"] .auth-btn { background: #fff; color: #1a1a1a; }
-        [data-auth-theme="light"] .auth-btn { background: #1a1a1a; color: #fff; }
-
-        /* ── Footer link ── */
-        .auth-switch {
-            text-align: center; margin-top: 1.25rem;
-            font-size: .85rem; transition: color .4s;
-        }
-        [data-auth-theme="dark"] .auth-switch { color: rgba(255,255,255,0.38); }
-        [data-auth-theme="light"] .auth-switch { color: #1a1a1a; }
-        .auth-switch a { color: var(--color-accent); font-weight: 600; text-decoration: none; }
-
-        /* ── Error alert ── */
-        .auth-error {
-            border-radius: 8px; padding: .65rem .9rem;
-            font-size: .85rem; margin-bottom: 1.1rem;
-        }
-        [data-auth-theme="dark"] .auth-error {
-            background: rgba(192,57,43,0.28);
-            border: 1px solid rgba(192,57,43,0.4);
-            color: #ffb3ae;
-        }
-        [data-auth-theme="light"] .auth-error {
-            background: #fdecea;
-            border: 1px solid #f5c6cb;
-            color: #c0392b;
-        }
-
-        /* ── Top controls ── */
-        .auth-top {
-            position: fixed; top: 1.4rem; right: 1.75rem;
-            z-index: 20; display: flex; align-items: center; gap: .75rem;
         }
 
         .auth-back {
-            font-size: .85rem; text-decoration: none;
-            transition: color .4s;
+            position: absolute;
+            top: 22px;
+            left: 32px;
+            z-index: 25;
+            color: rgba(106,72,24,.72);
+            font: 10px var(--font-sans, system-ui, sans-serif);
+            letter-spacing: .24em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: color .2s ease;
         }
-        [data-auth-theme="dark"] .auth-back { color: rgba(255,255,255,0.42); }
-        [data-auth-theme="light"] .auth-back { color: #1a1a1a; }
-        .auth-back:hover { opacity: .8; }
 
-        /* ── Theme toggle ── */
-        .auth-theme-btn {
-            display: flex; align-items: center; justify-content: center;
-            width: 36px; height: 36px; border-radius: 50%;
-            border: none; cursor: pointer;
-            transition: background .3s;
-        }
-        [data-auth-theme="dark"] .auth-theme-btn {
-            background: rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.7);
-        }
-        [data-auth-theme="dark"] .auth-theme-btn:hover { background: rgba(255,255,255,0.18); }
+        .auth-back:hover { color: #7a5020; }
+        [data-auth-theme="dark"] .auth-back { color: rgba(200,169,110,.72); }
+        [data-auth-theme="dark"] .auth-back:hover { color: #c8a96e; }
+        [data-auth-theme="light"] .auth-back { color: rgba(106,72,24,.72); }
+        [data-auth-theme="light"] .auth-back:hover { color: #7a5020; }
 
-        [data-auth-theme="light"] .auth-theme-btn {
-            background: rgba(0,0,0,0.08);
-            color: rgba(0,0,0,0.6);
+        .auth-theme-wrap {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            z-index: 30;
         }
-        [data-auth-theme="light"] .auth-theme-btn:hover { background: rgba(0,0,0,0.14); }
 
-        .auth-theme-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+        .auth-theme-switch {
+            position: relative;
+            width: 50px;
+            height: 32px;
+            border: 0;
+            border-radius: 999px;
+            padding: 0;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 12px 32px rgba(0,0,0,.18), inset 0 0 0 1px rgba(255,255,255,.28);
+            transition: transform .25s ease, box-shadow .35s ease;
+        }
+
+        .auth-theme-switch:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 38px rgba(0,0,0,.24), inset 0 0 0 1px rgba(255,255,255,.35);
+        }
+
+        .auth-theme-switch:focus-visible {
+            outline: 3px solid rgba(201,169,110,.45);
+            outline-offset: 3px;
+        }
+
+        .auth-theme-sky {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 74% 34%, rgba(255,255,255,.85) 0 1px, transparent 2px),
+                radial-gradient(circle at 55% 70%, rgba(255,255,255,.55) 0 1px, transparent 2px),
+                linear-gradient(135deg, #171b3d, #4b2c62 56%, #8f6087);
+            transition: background .45s ease;
+        }
+
+        .auth-theme-orb {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #fff3bb;
+            box-shadow: 0 0 16px rgba(255,221,134,.65);
+            transition: transform .45s cubic-bezier(.34,1.56,.64,1), background .35s ease, box-shadow .35s ease;
+        }
+
+        .auth-theme-orb::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            top: -2px;
+            right: -6px;
+            background: #171b3d;
+            opacity: 1;
+            transition: transform .45s ease, opacity .25s ease, background .45s ease;
+        }
+
+        .auth-theme-cloud {
+            position: absolute;
+            right: 7px;
+            bottom: 7px;
+            width: 18px;
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(255,255,255,.86);
+            opacity: 0;
+            transform: translateX(14px);
+            transition: transform .45s ease, opacity .3s ease;
+        }
+
+        .auth-theme-cloud::before,
+        .auth-theme-cloud::after {
+            content: "";
+            position: absolute;
+            bottom: 3px;
+            border-radius: 50%;
+            background: inherit;
+        }
+
+        .auth-theme-cloud::before { left: 3px; width: 9px; height: 9px; }
+        .auth-theme-cloud::after { right: 3px; width: 7px; height: 7px; }
+
+        [data-auth-theme="light"] .auth-theme-switch {
+            box-shadow: 0 12px 28px rgba(201,169,110,.24), inset 0 0 0 1px rgba(255,255,255,.72);
+        }
+
+        [data-auth-theme="light"] .auth-theme-sky { background: linear-gradient(135deg, #8ed8ff, #ffe0a6); }
+
+        [data-auth-theme="light"] .auth-theme-orb {
+            transform: translateX(18px) rotate(90deg);
+            background: #ffd36e;
+            box-shadow: 0 0 18px rgba(255,178,71,.65);
+        }
+
+        [data-auth-theme="light"] .auth-theme-orb::after {
+            opacity: 0;
+            transform: translate(10px, -10px) scale(.5);
+            background: #8ed8ff;
+        }
+
+        [data-auth-theme="light"] .auth-theme-cloud {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .visual-side {
+            flex: 0 0 50%;
+            min-width: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .visual-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .petals {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .form-side {
+            width: 50%;
+            flex-shrink: 0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f7f3ee;
+            transition: background .35s ease;
+        }
+
+        [data-auth-theme="light"] .form-side { background: #fff; }
+
+        .corner-tl,
+        .corner-br {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            pointer-events: none;
+            opacity: .28;
+            color: #c8a96e;
+            transition: color .35s ease;
+        }
+
+        .corner-tl { top: 0; left: 0; }
+        .corner-br { right: 0; bottom: 0; }
+        [data-auth-theme="light"] .corner-tl,
+        [data-auth-theme="light"] .corner-br { color: #9a6828; }
+
+        .form-inner {
+            flex: 1;
+            width: min(100%, 340px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 56px 36px 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-logo {
+            margin-bottom: 22px;
+            padding-top: 0;
+        }
+
+        .logo-name {
+            color: #1a1210;
+            font-size: 18px;
+            letter-spacing: .32em;
+            text-transform: uppercase;
+            font-weight: 400;
+        }
+
+        .logo-rule {
+            width: 28px;
+            height: 1px;
+            margin: 6px 0;
+            background: #c8a96e;
+        }
+
+        .logo-sub {
+            color: #b8a090;
+            font-size: 10px;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            font-style: italic;
+        }
+
+        [data-auth-theme="light"] .logo-rule { background: #9a6828; }
+        [data-auth-theme="light"] .logo-sub { color: #7a6050; }
+
+        .auth-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 26px;
+            font-size: 10px;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+        }
+
+        .auth-tabs a {
+            color: #b8a090;
+            text-decoration: none;
+            padding-bottom: 5px;
+            border-bottom: 1px solid transparent;
+            transition: color .2s ease, border-color .2s ease;
+        }
+
+        .auth-tabs a.active,
+        .auth-tabs a:hover {
+            color: #c8a96e;
+            border-color: #c8a96e;
+        }
+
+        [data-auth-theme="light"] .auth-tabs a { color: #7a6050; }
+        [data-auth-theme="light"] .auth-tabs a.active,
+        [data-auth-theme="light"] .auth-tabs a:hover {
+            color: #9a6828;
+            border-color: #9a6828;
+        }
+
+        .screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            animation: screenIn .3s cubic-bezier(.4,0,.2,1);
+        }
+
+        .screen-title {
+            color: #1a1210;
+            font-size: 25px;
+            font-weight: 400;
+            letter-spacing: .05em;
+            margin: 0 0 3px;
+        }
+
+        .screen-sub {
+            color: #b8a090;
+            font-size: 10px;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            font-style: italic;
+            margin-bottom: 26px;
+        }
+
+        [data-auth-theme="light"] .screen-sub { color: #7a6050; }
+
+        .field {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .field input {
+            display: block;
+            width: 100%;
+            padding: 18px 36px 8px 0;
+            border: 0;
+            border-bottom: 1.5px solid #c8bdb0;
+            border-radius: 0;
+            background: transparent;
+            color: #1a1210;
+            caret-color: #1a1210;
+            box-shadow: none;
+            font: 14px Georgia, "Times New Roman", serif;
+            letter-spacing: .04em;
+            transition: border-bottom-color .18s ease;
+            appearance: none;
+        }
+
+        .field input:hover,
+        .field input:focus {
+            border-bottom-color: #c8a96e;
+            box-shadow: none;
+        }
+
+        [data-auth-theme="light"] .field input { border-bottom-color: #b09070; }
+        [data-auth-theme="light"] .field input:hover,
+        [data-auth-theme="light"] .field input:focus { border-bottom-color: #7a5020; }
+
+        .field input::placeholder { color: transparent; }
+
+        .field label {
+            position: absolute;
+            left: 0;
+            top: 18px;
+            color: #b8a090;
+            font-size: 10px;
+            letter-spacing: .22em;
+            line-height: 1;
+            text-transform: uppercase;
+            pointer-events: none;
+            transition: all .2s cubic-bezier(.4,0,.2,1);
+        }
+
+        .field input:focus ~ label,
+        .field input:not(:placeholder-shown) ~ label {
+            top: 2px;
+            color: #c8a96e;
+            font-size: 9px;
+            letter-spacing: .25em;
+        }
+
+        [data-auth-theme="light"] .field label { color: #9a7858; }
+        [data-auth-theme="light"] .field input:focus ~ label,
+        [data-auth-theme="light"] .field input:not(:placeholder-shown) ~ label { color: #7a5020; }
+
+        .field-ul {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background: #c8a96e;
+            transition: width .28s ease;
+            pointer-events: none;
+        }
+
+        .field input:focus ~ .field-ul { width: 100%; }
+        [data-auth-theme="light"] .field-ul { background: #7a5020; }
+
+        .auth-error,
+        .field-err {
+            color: #a0503a;
+            font-size: 11px;
+            letter-spacing: .05em;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .auth-error {
+            min-height: 14px;
+            margin: -10px 0 12px;
+        }
+
+        .field-err { margin-top: 6px; }
+
+        .btn-main {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px;
+            margin-top: 4px;
+            border: 1px solid #c8a96e;
+            background: transparent;
+            color: #1a1210;
+            cursor: pointer;
+            font: 10px Georgia, "Times New Roman", serif;
+            letter-spacing: .3em;
+            text-transform: uppercase;
+            transition: background .2s ease, color .2s ease, border-color .2s ease;
+        }
+
+        .btn-main:hover {
+            background: #c8a96e;
+            color: #fff;
+        }
+
+        [data-auth-theme="light"] .btn-main { border-color: #9a6828; }
+        [data-auth-theme="light"] .btn-main:hover { background: #9a6828; }
+
+        .divider-or {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 16px 0 12px;
+            color: #b8a090;
+        }
+
+        .divider-or span {
+            font-size: 9px;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+        }
+
+        [data-auth-theme="light"] .divider-or { color: #7a6050; }
+
+        .link-row {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: #b8a090;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .link-row a {
+            color: #c8a96e;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            letter-spacing: .05em;
+        }
+
+        [data-auth-theme="light"] .link-row { color: #7a6050; }
+        [data-auth-theme="light"] .link-row a { color: #9a6828; }
+
+        @keyframes screenIn {
+            from { opacity: 0; transform: translateX(14px); }
+            to { opacity: 1; transform: none; }
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: .5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes pulseRing {
+            0% { transform: scale(1); opacity: .4; }
+            100% { transform: scale(1.9); opacity: 0; }
+        }
+
+        @keyframes driftBottle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-7px); }
+        }
+
+        @media (max-width: 760px) {
+            body { padding: 0; }
+
+            .auth-shell {
+                width: 100%;
+                height: auto;
+                min-height: 100vh;
+                border-radius: 0;
+            }
+
+            .visual-side { display: none; }
+
+            .form-side {
+                width: 100%;
+                max-width: none;
+            }
+
+            .form-inner {
+                width: min(100%, 420px);
+                margin: 0 auto;
+                padding: 76px 28px 32px;
+            }
+        }
     </style>
 </head>
 <body>
+<main class="auth-shell" id="authShell">
+    <a href="{% url 'home' %}" class="auth-back">Home</a>
 
-<div id="aurora-bg"></div>
-<div id="light-bg"></div>
-
-<!-- Top controls -->
-<div class="auth-top">
-    <a href="{% url 'home' %}" class="auth-back">← Home</a>
-    <button class="auth-theme-btn" id="authThemeBtn" title="Toggle theme">
-        <!-- Sun icon (shown in dark mode) -->
-        <svg id="authIconSun" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"/>
-            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-        </svg>
-        <!-- Moon icon (shown in light mode) -->
-        <svg id="authIconMoon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" style="display:none">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
-    </button>
-</div>
-
-<!-- Auth card -->
-<div class="auth-wrap">
-    <div class="auth-card">
-        <a href="{% url 'home' %}" class="auth-brand">Beauty Store</a>
-
-        <!-- Tabs -->
-        <div class="auth-tabs">
-            <a href="{% url 'login' %}" class="auth-tab {% if tab == 'login' %}active{% endif %}">Login</a>
-            <a href="{% url 'register' %}" class="auth-tab {% if tab == 'register' %}active{% endif %}">Register</a>
-        </div>
-
-        <!-- Login panel -->
-        <div class="auth-panel {% if tab == 'login' %}active{% endif %}" id="panel-login">
-            {% if error %}
-                <div class="auth-error">{{ error }}</div>
-            {% endif %}
-
-            <form method="post" action="{% url 'login' %}">
-                {% csrf_token %}
-                <div class="mb-3">
-                    <label class="auth-label">Username</label>
-                    <input type="text" name="username" class="auth-input"
-                           value="{{ request.POST.username }}" autofocus>
-                </div>
-                <div class="mb-4">
-                    <label class="auth-label">Password</label>
-                    <input type="password" name="password" class="auth-input">
-                </div>
-                <button type="submit" class="auth-btn">Login</button>
-            </form>
-
-            <div class="auth-switch">
-                No account? <a href="{% url 'register' %}">Register</a>
-            </div>
-        </div>
-
-        <!-- Register panel -->
-        <div class="auth-panel {% if tab == 'register' %}active{% endif %}" id="panel-register">
-            <form method="post" action="{% url 'register' %}">
-                {% csrf_token %}
-
-                {% for field in form %}
-                    <div class="mb-3">
-                        <label class="auth-label">{{ field.label }}</label>
-                        <input
-                            type="{{ field.field.widget.input_type }}"
-                            name="{{ field.html_name }}"
-                            class="auth-input {% if field.errors %}is-invalid{% endif %}"
-                            {% if field.value %}value="{{ field.value }}"{% endif %}
-                        >
-                        {% for err in field.errors %}
-                            <div class="field-err">{{ err }}</div>
-                        {% endfor %}
-                    </div>
-                {% endfor %}
-
-                <button type="submit" class="auth-btn">Create account</button>
-            </form>
-
-            <div class="auth-switch">
-                Already have an account? <a href="{% url 'login' %}">Login</a>
-            </div>
-        </div>
-
+    <div class="auth-theme-wrap">
+        <button class="auth-theme-switch" id="authThemeBtn" type="button" aria-label="Switch theme" title="Toggle theme">
+            <span class="auth-theme-sky" aria-hidden="true"></span>
+            <span class="auth-theme-orb" aria-hidden="true"></span>
+            <span class="auth-theme-cloud" aria-hidden="true"></span>
+        </button>
     </div>
-</div>
 
-<!-- Three.js aurora -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+    <section class="visual-side" aria-hidden="true">
+        <svg class="visual-svg" id="visualSvg" viewBox="0 0 360 680" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="petals" id="petals"></div>
+    </section>
+
+    <section class="form-side">
+        <svg class="corner-tl" viewBox="0 0 70 70">
+            <path d="M0 70L0 0L70 0" fill="none" stroke="currentColor" stroke-width=".8"/>
+            <path d="M0 50L0 0L50 0" fill="none" stroke="currentColor" stroke-width=".4"/>
+        </svg>
+        <svg class="corner-br" viewBox="0 0 70 70">
+            <path d="M70 0L70 70L0 70" fill="none" stroke="currentColor" stroke-width=".8"/>
+            <path d="M70 20L70 70L20 70" fill="none" stroke="currentColor" stroke-width=".4"/>
+        </svg>
+
+        <div class="form-inner">
+            <div class="form-logo">
+                <div class="logo-name">Lumiere</div>
+                <div class="logo-rule"></div>
+                <div class="logo-sub">Paris · Maison de beaute</div>
+            </div>
+
+            <nav class="auth-tabs" aria-label="Auth navigation">
+                <a href="{% url 'login' %}" class="{% if tab == 'login' %}active{% endif %}">Login</a>
+                <a href="{% url 'register' %}" class="{% if tab == 'register' %}active{% endif %}">Register</a>
+            </nav>
+
+            {% if tab == "login" %}
+                <div class="screen">
+                    <h1 class="screen-title">Welcome</h1>
+                    <div class="screen-sub">Sign in to your account</div>
+
+                    <form method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        <div class="field">
+                            <input type="text" name="username" id="login-username" placeholder=" " value="{{ request.POST.username }}" autocomplete="username" autofocus>
+                            <label for="login-username">Email address</label>
+                            <div class="field-ul"></div>
+                        </div>
+                        <div class="field">
+                            <input type="password" name="password" id="login-password" placeholder=" " autocomplete="current-password">
+                            <label for="login-password">Password</label>
+                            <div class="field-ul"></div>
+                        </div>
+
+                        {% if error %}
+                            <div class="auth-error">{{ error }}</div>
+                        {% else %}
+                            <div class="auth-error" aria-hidden="true"></div>
+                        {% endif %}
+
+                        <button type="submit" class="btn-main">Enter</button>
+                    </form>
+
+                    <div class="divider-or"><span>or</span></div>
+                    <div class="link-row"><a href="{% url 'register' %}">Create account</a></div>
+                    <div class="link-row"><a href="#">Forgot password?</a></div>
+                </div>
+            {% else %}
+                <div class="screen">
+                    <h1 class="screen-title">Join us</h1>
+                    <div class="screen-sub">Create your account</div>
+
+                    <form method="post" action="{% url 'register' %}">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="field">
+                                <input
+                                    type="{{ field.field.widget.input_type }}"
+                                    name="{{ field.html_name }}"
+                                    id="{{ field.id_for_label }}"
+                                    placeholder=" "
+                                    autocomplete="{% if field.name == 'username' %}username{% elif 'password' in field.name %}new-password{% else %}off{% endif %}"
+                                    {% if field.value %}value="{{ field.value }}"{% endif %}
+                                >
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <div class="field-ul"></div>
+                                {% for err in field.errors %}
+                                    <div class="field-err">{{ err }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+
+                        <button type="submit" class="btn-main">Create account</button>
+                    </form>
+
+                    <div class="divider-or"><span>or</span></div>
+                    <div class="link-row"><a href="{% url 'login' %}">Back to sign in</a></div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+</main>
+
 <script>
-// ── Aurora ──────────────────────────────────────────────
 (function () {
-    var container = document.getElementById('aurora-bg');
-    var scene    = new THREE.Scene();
-    var camera   = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    var renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    container.appendChild(renderer.domElement);
-
-    var material = new THREE.ShaderMaterial({
-        uniforms: {
-            iTime:       { value: 0.0 },
-            iResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
-        },
-        vertexShader: 'void main(){gl_Position=vec4(position,1.0);}',
-        fragmentShader: [
-            'uniform float iTime;',
-            'uniform vec2 iResolution;',
-            '#define NUM_OCTAVES 3',
-            'float rand(vec2 n){return fract(sin(dot(n,vec2(12.9898,4.1414)))*43758.5453);}',
-            'float noise(vec2 p){',
-            '  vec2 ip=floor(p);vec2 u=fract(p);',
-            '  u=u*u*(3.0-2.0*u);',
-            '  float res=mix(mix(rand(ip),rand(ip+vec2(1.0,0.0)),u.x),',
-            '    mix(rand(ip+vec2(0.0,1.0)),rand(ip+vec2(1.0,1.0)),u.x),u.y);',
-            '  return res*res;',
-            '}',
-            'float fbm(vec2 x){',
-            '  float v=0.0;float a=0.3;vec2 shift=vec2(100.0);',
-            '  mat2 rot=mat2(cos(0.5),sin(0.5),-sin(0.5),cos(0.5));',
-            '  for(int i=0;i<NUM_OCTAVES;++i){v+=a*noise(x);x=rot*x*2.0+shift;a*=0.4;}',
-            '  return v;',
-            '}',
-            'void main(){',
-            '  vec2 shake=vec2(sin(iTime*1.2)*0.005,cos(iTime*2.1)*0.005);',
-            '  vec2 p=((gl_FragCoord.xy+shake*iResolution.xy)-iResolution.xy*0.5)/iResolution.y*mat2(6.0,-4.0,4.0,6.0);',
-            '  vec2 v;vec4 o=vec4(0.0);',
-            '  float f=2.0+fbm(p+vec2(iTime*5.0,0.0))*0.5;',
-            '  for(float i=0.0;i<35.0;i++){',
-            '    v=p+cos(i*i+(iTime+p.x*0.08)*0.025+i*vec2(13.0,11.0))*3.5',
-            '      +vec2(sin(iTime*3.0+i)*0.003,cos(iTime*3.5-i)*0.003);',
-            '    float tn=fbm(v+vec2(iTime*0.5,i))*0.3*(1.0-(i/35.0));',
-            '    vec4 col=vec4(0.1+0.3*sin(i*0.2+iTime*0.4),0.3+0.5*cos(i*0.3+iTime*0.5),0.7+0.3*sin(i*0.4+iTime*0.3),1.0);',
-            '    vec4 c=col*exp(sin(i*i+iTime*0.8))/length(max(v,vec2(v.x*f*0.015,v.y*1.5)));',
-            '    o+=c*(1.0+tn*0.8)*smoothstep(0.0,1.0,i/35.0)*0.6;',
-            '  }',
-            '  o=tanh(pow(o/100.0,vec4(1.6)));',
-            '  gl_FragColor=o*1.5;',
-            '}'
-        ].join('\n')
-    });
-
-    scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
-
-    (function animate() {
-        requestAnimationFrame(animate);
-        material.uniforms.iTime.value += 0.016;
-        renderer.render(scene, camera);
-    })();
-
-    window.addEventListener('resize', function () {
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        material.uniforms.iResolution.value.set(window.innerWidth, window.innerHeight);
-    });
-})();
-
-// ── Theme toggle ──────────────────────────────────────
-(function () {
-    var html    = document.documentElement;
-    var btn     = document.getElementById('authThemeBtn');
-    var iconSun  = document.getElementById('authIconSun');
-    var iconMoon = document.getElementById('authIconMoon');
+    var html = document.documentElement;
+    var btn = document.getElementById('authThemeBtn');
+    var svg = document.getElementById('visualSvg');
+    var petals = document.getElementById('petals');
+    var petalTimer = null;
 
     var saved = localStorage.getItem('auth-theme') || 'dark';
     apply(saved);
@@ -400,13 +700,107 @@
 
     function apply(theme) {
         html.setAttribute('data-auth-theme', theme);
+        btn.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+        renderVisual(theme);
+        startPetals(theme);
+    }
+
+    function renderVisual(theme) {
+        if (!svg) return;
+
         if (theme === 'dark') {
-            iconSun.style.display  = 'block';
-            iconMoon.style.display = 'none';
+            svg.innerHTML =
+                '<defs>' +
+                '<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">' +
+                '<stop offset="0%" stop-color="#1a0e0a"/><stop offset="55%" stop-color="#0d0d0d"/><stop offset="100%" stop-color="#0a1018"/>' +
+                '</linearGradient>' +
+                '<linearGradient id="fl" x1="0" y1="0" x2="1" y2="1">' +
+                '<stop offset="0%" stop-color="#2a2015"/><stop offset="40%" stop-color="#3d3020"/><stop offset="70%" stop-color="#c8a96e" stop-opacity=".4"/><stop offset="100%" stop-color="#1a1410"/>' +
+                '</linearGradient></defs>' +
+                '<rect width="360" height="680" fill="url(#bg)"/>' +
+                '<circle cx="170" cy="290" r="130" fill="none" stroke="#c8a96e" stroke-width=".5" opacity=".1"/>' +
+                '<circle cx="170" cy="290" r="100" fill="none" stroke="#c8a96e" stroke-width=".4" opacity=".08"/>' +
+                '<circle cx="170" cy="290" r="70" fill="none" stroke="#c8a96e" stroke-width=".5" opacity=".14" style="animation:pulseRing 3s ease-out infinite"/>' +
+                '<circle cx="170" cy="290" r="70" fill="none" stroke="#c8a96e" stroke-width=".4" opacity=".07" style="animation:pulseRing 3s ease-out infinite;animation-delay:1.5s"/>' +
+                '<rect x="146" y="208" width="48" height="7" rx="2" fill="#c8a96e" opacity=".35"/>' +
+                '<rect x="142" y="214" width="56" height="95" rx="8" fill="url(#fl)" stroke="#c8a96e" stroke-width=".5" opacity=".7" style="animation:driftBottle 6s ease-in-out infinite"/>' +
+                '<rect x="148" y="230" width="44" height="22" rx="2" fill="none" stroke="#c8a96e" stroke-width=".4" opacity=".5"/>' +
+                '<text x="170" y="242" text-anchor="middle" fill="#c8a96e" font-size="5" letter-spacing="1.5" opacity=".7" font-family="Georgia,serif">LUMIERE</text>' +
+                '<text x="170" y="249" text-anchor="middle" fill="#c8a96e" font-size="3.5" letter-spacing="1" opacity=".5" font-family="Georgia,serif">PARFUM</text>' +
+                '<text x="20" y="60" fill="#c8a96e" font-size="11" letter-spacing="3" opacity=".55" font-family="Georgia,serif">MAISON DE BEAUTE</text>' +
+                '<text x="180" y="400" text-anchor="middle" fill="#c8a96e" font-size="8" letter-spacing="3.5" opacity=".35" font-family="Georgia,serif">LA BEAUTE EST UNE PROMESSE</text>' +
+                '<line x1="55" y1="408" x2="305" y2="408" stroke="#c8a96e" stroke-width=".3" opacity=".12"/>' +
+                '<circle cx="38" cy="510" r="1.5" fill="#c8a96e" opacity=".5" style="animation:shimmer 2s ease-in-out infinite"/>' +
+                '<circle cx="310" cy="185" r="1.2" fill="#c8a96e" opacity=".55" style="animation:shimmer 2.5s ease-in-out infinite;animation-delay:.5s"/>' +
+                '<text x="180" y="648" text-anchor="middle" fill="#c8a96e" font-size="8" letter-spacing="2.5" opacity=".3" font-family="Georgia,serif">EST. 1921</text>';
         } else {
-            iconSun.style.display  = 'none';
-            iconMoon.style.display = 'block';
+            svg.innerHTML =
+                '<defs>' +
+                '<linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">' +
+                '<stop offset="0%" stop-color="#f5e8d4"/><stop offset="45%" stop-color="#fdf5e8"/><stop offset="100%" stop-color="#e8d8c0"/>' +
+                '</linearGradient>' +
+                '<linearGradient id="fl2" x1="0" y1="0" x2="1" y2="1">' +
+                '<stop offset="0%" stop-color="#e0ccaa"/><stop offset="50%" stop-color="#f0e0c0"/><stop offset="100%" stop-color="#9a6828" stop-opacity=".4"/>' +
+                '</linearGradient></defs>' +
+                '<rect width="360" height="680" fill="url(#bg2)"/>' +
+                '<circle cx="170" cy="290" r="130" fill="none" stroke="#7a5020" stroke-width=".6" opacity=".18"/>' +
+                '<circle cx="170" cy="290" r="100" fill="none" stroke="#7a5020" stroke-width=".4" opacity=".12"/>' +
+                '<circle cx="170" cy="290" r="70" fill="none" stroke="#7a5020" stroke-width=".5" opacity=".2" style="animation:pulseRing 3s ease-out infinite"/>' +
+                '<circle cx="170" cy="290" r="70" fill="none" stroke="#7a5020" stroke-width=".4" opacity=".1" style="animation:pulseRing 3s ease-out infinite;animation-delay:1.5s"/>' +
+                '<rect x="146" y="208" width="48" height="7" rx="2" fill="#7a5020" opacity=".55"/>' +
+                '<rect x="142" y="214" width="56" height="95" rx="8" fill="url(#fl2)" stroke="#7a5020" stroke-width=".6" opacity=".85" style="animation:driftBottle 6s ease-in-out infinite"/>' +
+                '<rect x="148" y="230" width="44" height="22" rx="2" fill="none" stroke="#7a5020" stroke-width=".5" opacity=".65"/>' +
+                '<text x="170" y="242" text-anchor="middle" fill="#3a2010" font-size="5" letter-spacing="1.5" opacity=".95" font-family="Georgia,serif">LUMIERE</text>' +
+                '<text x="170" y="249" text-anchor="middle" fill="#3a2010" font-size="3.5" letter-spacing="1" opacity=".8" font-family="Georgia,serif">PARFUM</text>' +
+                '<text x="20" y="60" fill="#1a1210" font-size="11" letter-spacing="3" opacity=".65" font-family="Georgia,serif">MAISON DE BEAUTE</text>' +
+                '<text x="180" y="400" text-anchor="middle" fill="#1a1210" font-size="8" letter-spacing="3.5" opacity=".4" font-family="Georgia,serif">LA BEAUTE EST UNE PROMESSE</text>' +
+                '<line x1="55" y1="408" x2="305" y2="408" stroke="#7a5020" stroke-width=".3" opacity=".15"/>' +
+                '<circle cx="38" cy="510" r="1.5" fill="#7a5020" opacity=".5" style="animation:shimmer 2s ease-in-out infinite"/>' +
+                '<circle cx="310" cy="185" r="1.2" fill="#7a5020" opacity=".55" style="animation:shimmer 2.5s ease-in-out infinite;animation-delay:.5s"/>' +
+                '<text x="180" y="648" text-anchor="middle" fill="#1a1210" font-size="8" letter-spacing="2.5" opacity=".4" font-family="Georgia,serif">EST. 1921</text>';
         }
+    }
+
+    function startPetals(theme) {
+        if (!petals) return;
+        if (petalTimer) clearInterval(petalTimer);
+        petals.innerHTML = '';
+
+        var color = theme === 'dark' ? 'rgba(200,169,110,.3)' : 'rgba(154,104,40,.18)';
+
+        function makePetal() {
+            var petal = document.createElement('div');
+            var x = 5 + Math.random() * 90;
+            var size = 4 + Math.random() * 5;
+            var duration = 9000 + Math.random() * 9000;
+            var drift = -25 + Math.random() * 50;
+            var start = performance.now();
+
+            petal.style.cssText =
+                'position:absolute;left:' + x + '%;bottom:-16px;width:' + size + 'px;height:' + (size * 2.1) + 'px;' +
+                'border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:' + color + ';';
+            petals.appendChild(petal);
+
+            function tick(now) {
+                var t = (now - start) / duration;
+                if (t >= 1) {
+                    petal.remove();
+                    return;
+                }
+
+                var opacity = t < .1 ? t / .1 : t > .85 ? (1 - t) / .15 : .55;
+                petal.style.transform = 'translateY(' + (-t * 680) + 'px) translateX(' + (drift * Math.sin(t * Math.PI * 2) * .5) + 'px) rotate(' + (t * 320) + 'deg)';
+                petal.style.opacity = opacity;
+                requestAnimationFrame(tick);
+            }
+
+            requestAnimationFrame(tick);
+        }
+
+        for (var i = 0; i < 5; i++) {
+            setTimeout(makePetal, i * 700);
+        }
+        petalTimer = setInterval(makePetal, 1900);
     }
 })();
 </script>
