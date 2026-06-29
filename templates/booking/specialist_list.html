@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Our Specialists | Beauty Store{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-header__title">Our Specialists</h1>
+        <p class="page-header__sub">Meet our experienced beauty professionals</p>
+    </div>
+
+    <div class="row g-4">
+        {% for specialist in specialists %}
+            <div class="col-sm-6 col-lg-4">
+                <div class="product-card">
+                    <div class="product-card__img-wrap">
+                        {% if specialist.photo %}
+                            <img src="{{ specialist.photo.url }}" alt="{{ specialist.name }}">
+                        {% else %}
+                            <div class="product-card__placeholder">No photo</div>
+                        {% endif %}
+                    </div>
+                    <div class="product-card__body">
+                        <div class="product-card__brand">{{ specialist.experience }} year{{ specialist.experience|pluralize }} experience</div>
+                        <div class="product-card__name">{{ specialist.name }}</div>
+                        <div class="product-card__desc">{{ specialist.bio|truncatewords:20 }}</div>
+
+                        <div style="margin-bottom:.75rem;">
+                            {% for service in specialist.services.all %}
+                                <span class="badge" style="background:var(--color-accent); color:#fff; font-size:.75rem; padding:.2rem .6rem; border-radius:999px; margin:.1rem .1rem 0 0;">
+                                    {{ service.name }}
+                                </span>
+                            {% endfor %}
+                        </div>
+
+                        <a href="{% url 'appointment-create' %}?specialist={{ specialist.pk }}"
+                           class="btn-primary-custom" style="padding:.5rem 1.1rem; font-size:.85rem; display:inline-block;">
+                            Book appointment
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <p class="text-muted-custom">No specialists available yet.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

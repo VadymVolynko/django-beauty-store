@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}My Appointments | Beauty Store{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="page-header d-flex align-items-center justify-content-between">
+        <div>
+            <h1 class="page-header__title mb-0">My Appointments</h1>
+            <p class="page-header__sub mb-0">Track and manage your bookings</p>
+        </div>
+        <a href="{% url 'appointment-create' %}" class="btn-primary-custom">+ New booking</a>
+    </div>
+
+    {% if appointments %}
+        <div class="row g-4">
+            {% for appt in appointments %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="product-card">
+                        <div class="product-card__body">
+                            <div class="product-card__brand">
+                                {{ appt.date }} at {{ appt.time|time:"H:i" }}
+                            </div>
+                            <div class="product-card__name">{{ appt.service.name }}</div>
+                            <div class="product-card__desc">with {{ appt.specialist.name }}</div>
+
+                            <div class="my-2">
+                                <span class="badge
+                                    {% if appt.status == 'confirmed' %}bg-success
+                                    {% elif appt.status == 'cancelled' %}bg-danger
+                                    {% elif appt.status == 'completed' %}bg-secondary
+                                    {% else %}bg-warning text-dark
+                                    {% endif %}">
+                                    {{ appt.get_status_display }}
+                                </span>
+                            </div>
+
+                            {% if appt.comment %}
+                                <div class="product-card__desc text-muted-custom" style="font-style:italic;">
+                                    "{{ appt.comment|truncatewords:12 }}"
+                                </div>
+                            {% endif %}
+
+                            {% if appt.status == 'pending' %}
+                                <div class="d-flex gap-2 mt-3">
+                                    <a href="{% url 'appointment-update' appt.pk %}"
+                                       class="btn-primary-custom" style="padding:.4rem .9rem; font-size:.82rem;">
+                                        Edit
+                                    </a>
+                                    <a href="{% url 'appointment-delete' appt.pk %}"
+                                       class="btn-outline-custom" style="padding:.4rem .9rem; font-size:.82rem; color:#c0392b; border-color:#c0392b;">
+                                        Cancel
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <p class="text-muted-custom mb-3">You have no appointments yet.</p>
+            <a href="{% url 'appointment-create' %}" class="btn-primary-custom">Book your first appointment</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

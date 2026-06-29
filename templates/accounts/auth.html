@@ -1,0 +1,414 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-auth-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if tab == "register" %}Create Account{% else %}Login{% endif %} | Beauty Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        html, body {
+            margin: 0; padding: 0;
+            overflow: hidden; height: 100%;
+        }
+
+        /* ── Aurora bg ── */
+        #aurora-bg {
+            position: fixed; inset: 0; z-index: 0;
+            transition: opacity .5s;
+        }
+
+        /* ── Light bg ── */
+        #light-bg {
+            position: fixed; inset: 0; z-index: 0;
+            background: linear-gradient(135deg, #fdf2e9 0%, #fce4d6 50%, #f0d8f0 100%);
+            opacity: 0;
+            transition: opacity .5s;
+        }
+
+        [data-auth-theme="light"] #aurora-bg { opacity: 0; pointer-events: none; }
+        [data-auth-theme="light"] #light-bg  { opacity: 1; }
+
+        /* ── Layout ── */
+        .auth-wrap {
+            position: fixed; inset: 0; z-index: 10;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* ── Card ── */
+        .auth-card {
+            width: 100%; max-width: 440px;
+            border-radius: 22px;
+            padding: 2.5rem 2.75rem;
+            transition: background .4s, border-color .4s, box-shadow .4s;
+        }
+
+        [data-auth-theme="dark"] .auth-card {
+            background: rgba(10, 10, 20, 0.58);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255,255,255,0.14);
+            box-shadow: 0 8px 60px rgba(0,0,0,0.55);
+        }
+
+        [data-auth-theme="light"] .auth-card {
+            background: rgba(255,255,255,0.82);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.9);
+            box-shadow: 0 8px 50px rgba(0,0,0,0.12);
+        }
+
+        /* ── Brand ── */
+        .auth-brand {
+            font-family: var(--font-serif);
+            font-size: .82rem; font-weight: 700;
+            letter-spacing: .14em; text-transform: uppercase;
+            text-decoration: none; display: block;
+            margin-bottom: 1.75rem;
+            transition: color .4s;
+        }
+        [data-auth-theme="dark"] .auth-brand { color: rgba(255,255,255,0.4); }
+        [data-auth-theme="light"] .auth-brand { color: var(--color-accent); }
+
+        /* ── Tabs ── */
+        .auth-tabs {
+            display: flex; gap: .25rem;
+            margin-bottom: 1.75rem;
+            border-radius: 10px; padding: 4px;
+            transition: background .4s;
+        }
+        [data-auth-theme="dark"] .auth-tabs  { background: rgba(255,255,255,0.07); }
+        [data-auth-theme="light"] .auth-tabs  { background: rgba(0,0,0,0.06); }
+
+        .auth-tab {
+            flex: 1; text-align: center;
+            padding: .55rem; border-radius: 7px;
+            font-size: .88rem; font-weight: 600;
+            cursor: pointer; text-decoration: none;
+            transition: background .25s, color .25s, box-shadow .25s;
+        }
+
+        [data-auth-theme="dark"] .auth-tab        { color: rgba(255,255,255,0.4); }
+        [data-auth-theme="dark"] .auth-tab.active {
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.3);
+        }
+
+        [data-auth-theme="light"] .auth-tab        { color: #1a1a1a; }
+        [data-auth-theme="light"] .auth-tab.active {
+            background: #fff;
+            color: #1a1a1a;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+        }
+
+        /* ── Form panels ── */
+        .auth-panel { display: none; }
+        .auth-panel.active { display: block; }
+
+        /* ── Labels ── */
+        .auth-label {
+            display: block; font-size: .8rem; font-weight: 600;
+            margin-bottom: .35rem; letter-spacing: .04em;
+            transition: color .4s;
+        }
+        [data-auth-theme="dark"] .auth-label { color: rgba(255,255,255,0.55); }
+        [data-auth-theme="light"] .auth-label { color: #1a1a1a; }
+
+        /* ── Inputs ── */
+        .auth-input {
+            width: 100%; padding: .7rem .95rem;
+            border-radius: 10px; font-size: .95rem;
+            outline: none; box-sizing: border-box;
+            transition: border-color .2s, background .2s, color .4s;
+        }
+        [data-auth-theme="dark"] .auth-input {
+            background: rgba(255,255,255,0.07);
+            border: 1.5px solid rgba(255,255,255,0.12);
+            color: #fff;
+        }
+        [data-auth-theme="dark"] .auth-input:focus {
+            border-color: rgba(255,255,255,0.38);
+            background: rgba(255,255,255,0.11);
+        }
+        [data-auth-theme="dark"] .auth-input::placeholder { color: rgba(255,255,255,0.2); }
+
+        [data-auth-theme="light"] .auth-input {
+            background: #fff;
+            border: 1.5px solid #e0d8d0;
+            color: #1a1a1a;
+        }
+        [data-auth-theme="light"] .auth-input:focus {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(201,169,110,.15);
+        }
+        [data-auth-theme="light"] .auth-input::placeholder { color: #bbb; }
+
+        .auth-input.is-invalid { border-color: #e74c3c !important; }
+        .field-err { font-size: .78rem; color: #e74c3c; margin-top: .25rem; }
+
+        /* ── Submit button ── */
+        .auth-btn {
+            width: 100%; padding: .78rem; border: none;
+            border-radius: 10px; font-size: .95rem; font-weight: 600;
+            cursor: pointer; margin-top: .25rem;
+            transition: opacity .2s, transform .15s, background .4s, color .4s;
+        }
+        .auth-btn:hover { opacity: .9; transform: translateY(-1px); }
+        [data-auth-theme="dark"] .auth-btn { background: #fff; color: #1a1a1a; }
+        [data-auth-theme="light"] .auth-btn { background: #1a1a1a; color: #fff; }
+
+        /* ── Footer link ── */
+        .auth-switch {
+            text-align: center; margin-top: 1.25rem;
+            font-size: .85rem; transition: color .4s;
+        }
+        [data-auth-theme="dark"] .auth-switch { color: rgba(255,255,255,0.38); }
+        [data-auth-theme="light"] .auth-switch { color: #1a1a1a; }
+        .auth-switch a { color: var(--color-accent); font-weight: 600; text-decoration: none; }
+
+        /* ── Error alert ── */
+        .auth-error {
+            border-radius: 8px; padding: .65rem .9rem;
+            font-size: .85rem; margin-bottom: 1.1rem;
+        }
+        [data-auth-theme="dark"] .auth-error {
+            background: rgba(192,57,43,0.28);
+            border: 1px solid rgba(192,57,43,0.4);
+            color: #ffb3ae;
+        }
+        [data-auth-theme="light"] .auth-error {
+            background: #fdecea;
+            border: 1px solid #f5c6cb;
+            color: #c0392b;
+        }
+
+        /* ── Top controls ── */
+        .auth-top {
+            position: fixed; top: 1.4rem; right: 1.75rem;
+            z-index: 20; display: flex; align-items: center; gap: .75rem;
+        }
+
+        .auth-back {
+            font-size: .85rem; text-decoration: none;
+            transition: color .4s;
+        }
+        [data-auth-theme="dark"] .auth-back { color: rgba(255,255,255,0.42); }
+        [data-auth-theme="light"] .auth-back { color: #1a1a1a; }
+        .auth-back:hover { opacity: .8; }
+
+        /* ── Theme toggle ── */
+        .auth-theme-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px; border-radius: 50%;
+            border: none; cursor: pointer;
+            transition: background .3s;
+        }
+        [data-auth-theme="dark"] .auth-theme-btn {
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.7);
+        }
+        [data-auth-theme="dark"] .auth-theme-btn:hover { background: rgba(255,255,255,0.18); }
+
+        [data-auth-theme="light"] .auth-theme-btn {
+            background: rgba(0,0,0,0.08);
+            color: rgba(0,0,0,0.6);
+        }
+        [data-auth-theme="light"] .auth-theme-btn:hover { background: rgba(0,0,0,0.14); }
+
+        .auth-theme-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+    </style>
+</head>
+<body>
+
+<div id="aurora-bg"></div>
+<div id="light-bg"></div>
+
+<!-- Top controls -->
+<div class="auth-top">
+    <a href="{% url 'home' %}" class="auth-back">← Home</a>
+    <button class="auth-theme-btn" id="authThemeBtn" title="Toggle theme">
+        <!-- Sun icon (shown in dark mode) -->
+        <svg id="authIconSun" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <!-- Moon icon (shown in light mode) -->
+        <svg id="authIconMoon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+</div>
+
+<!-- Auth card -->
+<div class="auth-wrap">
+    <div class="auth-card">
+        <a href="{% url 'home' %}" class="auth-brand">Beauty Store</a>
+
+        <!-- Tabs -->
+        <div class="auth-tabs">
+            <a href="{% url 'login' %}" class="auth-tab {% if tab == 'login' %}active{% endif %}">Login</a>
+            <a href="{% url 'register' %}" class="auth-tab {% if tab == 'register' %}active{% endif %}">Register</a>
+        </div>
+
+        <!-- Login panel -->
+        <div class="auth-panel {% if tab == 'login' %}active{% endif %}" id="panel-login">
+            {% if error %}
+                <div class="auth-error">{{ error }}</div>
+            {% endif %}
+
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="auth-label">Username</label>
+                    <input type="text" name="username" class="auth-input"
+                           value="{{ request.POST.username }}" autofocus>
+                </div>
+                <div class="mb-4">
+                    <label class="auth-label">Password</label>
+                    <input type="password" name="password" class="auth-input">
+                </div>
+                <button type="submit" class="auth-btn">Login</button>
+            </form>
+
+            <div class="auth-switch">
+                No account? <a href="{% url 'register' %}">Register</a>
+            </div>
+        </div>
+
+        <!-- Register panel -->
+        <div class="auth-panel {% if tab == 'register' %}active{% endif %}" id="panel-register">
+            <form method="post" action="{% url 'register' %}">
+                {% csrf_token %}
+
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label class="auth-label">{{ field.label }}</label>
+                        <input
+                            type="{{ field.field.widget.input_type }}"
+                            name="{{ field.html_name }}"
+                            class="auth-input {% if field.errors %}is-invalid{% endif %}"
+                            {% if field.value %}value="{{ field.value }}"{% endif %}
+                        >
+                        {% for err in field.errors %}
+                            <div class="field-err">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="auth-btn">Create account</button>
+            </form>
+
+            <div class="auth-switch">
+                Already have an account? <a href="{% url 'login' %}">Login</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Three.js aurora -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+// ── Aurora ──────────────────────────────────────────────
+(function () {
+    var container = document.getElementById('aurora-bg');
+    var scene    = new THREE.Scene();
+    var camera   = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    var renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    container.appendChild(renderer.domElement);
+
+    var material = new THREE.ShaderMaterial({
+        uniforms: {
+            iTime:       { value: 0.0 },
+            iResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
+        },
+        vertexShader: 'void main(){gl_Position=vec4(position,1.0);}',
+        fragmentShader: [
+            'uniform float iTime;',
+            'uniform vec2 iResolution;',
+            '#define NUM_OCTAVES 3',
+            'float rand(vec2 n){return fract(sin(dot(n,vec2(12.9898,4.1414)))*43758.5453);}',
+            'float noise(vec2 p){',
+            '  vec2 ip=floor(p);vec2 u=fract(p);',
+            '  u=u*u*(3.0-2.0*u);',
+            '  float res=mix(mix(rand(ip),rand(ip+vec2(1.0,0.0)),u.x),',
+            '    mix(rand(ip+vec2(0.0,1.0)),rand(ip+vec2(1.0,1.0)),u.x),u.y);',
+            '  return res*res;',
+            '}',
+            'float fbm(vec2 x){',
+            '  float v=0.0;float a=0.3;vec2 shift=vec2(100.0);',
+            '  mat2 rot=mat2(cos(0.5),sin(0.5),-sin(0.5),cos(0.5));',
+            '  for(int i=0;i<NUM_OCTAVES;++i){v+=a*noise(x);x=rot*x*2.0+shift;a*=0.4;}',
+            '  return v;',
+            '}',
+            'void main(){',
+            '  vec2 shake=vec2(sin(iTime*1.2)*0.005,cos(iTime*2.1)*0.005);',
+            '  vec2 p=((gl_FragCoord.xy+shake*iResolution.xy)-iResolution.xy*0.5)/iResolution.y*mat2(6.0,-4.0,4.0,6.0);',
+            '  vec2 v;vec4 o=vec4(0.0);',
+            '  float f=2.0+fbm(p+vec2(iTime*5.0,0.0))*0.5;',
+            '  for(float i=0.0;i<35.0;i++){',
+            '    v=p+cos(i*i+(iTime+p.x*0.08)*0.025+i*vec2(13.0,11.0))*3.5',
+            '      +vec2(sin(iTime*3.0+i)*0.003,cos(iTime*3.5-i)*0.003);',
+            '    float tn=fbm(v+vec2(iTime*0.5,i))*0.3*(1.0-(i/35.0));',
+            '    vec4 col=vec4(0.1+0.3*sin(i*0.2+iTime*0.4),0.3+0.5*cos(i*0.3+iTime*0.5),0.7+0.3*sin(i*0.4+iTime*0.3),1.0);',
+            '    vec4 c=col*exp(sin(i*i+iTime*0.8))/length(max(v,vec2(v.x*f*0.015,v.y*1.5)));',
+            '    o+=c*(1.0+tn*0.8)*smoothstep(0.0,1.0,i/35.0)*0.6;',
+            '  }',
+            '  o=tanh(pow(o/100.0,vec4(1.6)));',
+            '  gl_FragColor=o*1.5;',
+            '}'
+        ].join('\n')
+    });
+
+    scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
+
+    (function animate() {
+        requestAnimationFrame(animate);
+        material.uniforms.iTime.value += 0.016;
+        renderer.render(scene, camera);
+    })();
+
+    window.addEventListener('resize', function () {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        material.uniforms.iResolution.value.set(window.innerWidth, window.innerHeight);
+    });
+})();
+
+// ── Theme toggle ──────────────────────────────────────
+(function () {
+    var html    = document.documentElement;
+    var btn     = document.getElementById('authThemeBtn');
+    var iconSun  = document.getElementById('authIconSun');
+    var iconMoon = document.getElementById('authIconMoon');
+
+    var saved = localStorage.getItem('auth-theme') || 'dark';
+    apply(saved);
+
+    btn.addEventListener('click', function () {
+        var next = html.getAttribute('data-auth-theme') === 'dark' ? 'light' : 'dark';
+        apply(next);
+        localStorage.setItem('auth-theme', next);
+    });
+
+    function apply(theme) {
+        html.setAttribute('data-auth-theme', theme);
+        if (theme === 'dark') {
+            iconSun.style.display  = 'block';
+            iconMoon.style.display = 'none';
+        } else {
+            iconSun.style.display  = 'none';
+            iconMoon.style.display = 'block';
+        }
+    }
+})();
+</script>
+</body>
+</html>
