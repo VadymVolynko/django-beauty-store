@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} | Beauty Store{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <a href="{% url 'catalog' %}" class="text-muted-custom d-inline-flex align-items-center gap-1 mb-4" style="font-size:.875rem;">
+        ← Back to catalog
+    </a>
+
+    <div class="row g-5">
+        <!-- Image -->
+        <div class="col-md-5">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                     class="product-detail__img shadow-sm">
+            {% else %}
+                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                     style="height:400px; background:#f5f0ea; border:1px solid var(--color-border);">
+                    <span class="text-muted-custom">No image</span>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Info -->
+        <div class="col-md-7">
+            <div class="product-detail__brand">{{ product.brand.name }}</div>
+            <h1 class="product-detail__name">{{ product.name }}</h1>
+            <div class="product-detail__price">${{ product.price }}</div>
+
+            <hr class="product-detail__divider">
+
+            <p class="product-detail__desc">{{ product.description }}</p>
+
+            {% if not product.is_available or product.stock == 0 %}
+                <span class="stock-badge stock-badge--out">Out of stock</span>
+            {% else %}
+                <span class="stock-badge stock-badge--in">In stock — {{ product.stock }} available</span>
+
+                <form method="post" action="{% url 'cart-add' product.id %}"
+                      class="d-flex align-items-center gap-3 mt-4">
+                    {% csrf_token %}
+                    <input type="number" name="quantity" value="1"
+                           min="1" max="{{ product.stock }}"
+                           class="form-control qty-input">
+                    <button type="submit" class="btn-accent">Add to cart</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,5 +1,32 @@
-<footer class="border-top mt-5 py-4">
-    <div class="container text-center text-muted">
-        <p class="mb-0">© 2026 Beauty Store. All rights reserved.</p>
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4 mb-md-0">
+                <div class="footer__brand">Beauty Store</div>
+                <div class="footer__tagline">Discover cosmetics for your daily beauty routine.</div>
+            </div>
+            <div class="col-md-2 mb-4 mb-md-0">
+                <div class="fw-semibold text-white mb-2" style="font-size:.85rem;">Shop</div>
+                <div><a href="{% url 'catalog' %}" class="d-block mb-1">All Products</a></div>
+                <div><a href="{% url 'cart' %}" class="d-block">Cart</a></div>
+            </div>
+            <div class="col-md-2 mb-4 mb-md-0">
+                <div class="fw-semibold text-white mb-2" style="font-size:.85rem;">Booking</div>
+                <div><a href="{% url 'service-list' %}" class="d-block mb-1">Services</a></div>
+                <div><a href="{% url 'specialist-list' %}" class="d-block mb-1">Specialists</a></div>
+                <div><a href="{% url 'appointment-create' %}" class="d-block">Book now</a></div>
+            </div>
+            <div class="col-md-4">
+                <div class="fw-semibold text-white mb-2" style="font-size:.85rem;">Account</div>
+                {% if request.user.is_authenticated %}
+                    <div><a href="{% url 'profile' %}" class="d-block mb-1">Profile</a></div>
+                    <div><a href="{% url 'logout' %}" class="d-block">Logout</a></div>
+                {% else %}
+                    <div><a href="{% url 'login' %}" class="d-block mb-1">Login</a></div>
+                    <div><a href="{% url 'register' %}" class="d-block">Register</a></div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="footer__copy">© 2026 Beauty Store. All rights reserved.</div>
     </div>
 </footer>
