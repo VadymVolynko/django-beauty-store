@@ -1,0 +1,15 @@
+Hello {{ appointment.user.first_name|default:appointment.user.username }},
+
+Your appointment has been booked!
+
+Service:    {{ appointment.service.name }}
+Specialist: {{ appointment.specialist.name }}
+Date:       {{ appointment.date|date:"F j, Y" }}
+Time:       {{ appointment.time|time:"H:i" }}
+Duration:   {{ appointment.service.duration }} min
+
+{% if appointment.comment %}Your note: {{ appointment.comment }}{% endif %}
+
+You can view or cancel your appointment in your profile.
+
+— Beauty Store

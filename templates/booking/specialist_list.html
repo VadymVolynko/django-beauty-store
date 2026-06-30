@@ -1,12 +1,13 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Our Specialists | Beauty Store{% endblock %}
+{% block title %}{% trans "Specialists" %} | Beauty Store{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="page-header">
-        <h1 class="page-header__title">Our Specialists</h1>
-        <p class="page-header__sub">Meet our experienced beauty professionals</p>
+        <h1 class="page-header__title">{% trans "Our Specialists" %}</h1>
+        <p class="page-header__sub">{% trans "Meet our experienced beauty professionals" %}</p>
     </div>
 
     <div class="row g-4">
@@ -17,11 +18,13 @@
                         {% if specialist.photo %}
                             <img src="{{ specialist.photo.url }}" alt="{{ specialist.name }}">
                         {% else %}
-                            <div class="product-card__placeholder">No photo</div>
+                            <div class="product-card__placeholder">{% trans "No photo" %}</div>
                         {% endif %}
                     </div>
                     <div class="product-card__body">
-                        <div class="product-card__brand">{{ specialist.experience }} year{{ specialist.experience|pluralize }} experience</div>
+                        <div class="product-card__brand">
+                            {% blocktrans with exp=specialist.experience %}{{ exp }} years experience{% endblocktrans %}
+                        </div>
                         <div class="product-card__name">{{ specialist.name }}</div>
                         <div class="product-card__desc">{{ specialist.bio|truncatewords:20 }}</div>
 
@@ -35,14 +38,14 @@
 
                         <a href="{% url 'appointment-create' %}?specialist={{ specialist.pk }}"
                            class="btn-primary-custom" style="padding:.5rem 1.1rem; font-size:.85rem; display:inline-block;">
-                            Book appointment
+                            {% trans "Book appointment" %}
                         </a>
                     </div>
                 </div>
             </div>
         {% empty %}
             <div class="col-12">
-                <p class="text-muted-custom">No specialists available yet.</p>
+                <p class="text-muted-custom">{% trans "No specialists available yet." %}</p>
             </div>
         {% endfor %}
     </div>

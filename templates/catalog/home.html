@@ -1,33 +1,27 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Home | Beauty Store{% endblock %}
+{% block title %}{% trans "Home" %} | Beauty Store{% endblock %}
 
 {% block content %}
 
-<!-- Hero -->
 <section class="hero">
     <div class="container">
-        <p class="text-accent fw-semibold mb-2" style="font-size:.85rem; letter-spacing:.1em; text-transform:uppercase;">New collection 2026</p>
-        <h1 class="hero__title">Your Daily<br>Beauty Ritual</h1>
+        <p class="text-accent fw-semibold mb-2" style="font-size:.85rem; letter-spacing:.1em; text-transform:uppercase;">{% trans "New collection 2026" %}</p>
+        <h1 class="hero__title">{% trans "Your Daily Beauty Ritual" %}</h1>
         <hr class="hero__divider">
-        <p class="hero__subtitle">
-            Premium cosmetics and skincare for every skin type.
-            Discover what works for you.
-        </p>
-        <a href="{% url 'catalog' %}" class="btn-primary-custom">Shop now</a>
+        <p class="hero__subtitle">{% trans "Premium cosmetics and skincare for every skin type. Discover what works for you." %}</p>
+        <a href="{% url 'catalog' %}" class="btn-primary-custom">{% trans "Shop now" %}</a>
     </div>
 </section>
 
-<!-- Popular Products -->
 <section class="container mt-5 pt-2">
     <div class="d-flex align-items-end justify-content-between mb-4">
         <div>
-            <h2 class="section-title mb-1">Popular Products</h2>
-            <p class="section-subtitle mb-0">Handpicked favourites from our catalog</p>
+            <h2 class="section-title mb-1">{% trans "Popular Products" %}</h2>
+            <p class="section-subtitle mb-0">{% trans "Handpicked favourites from our catalog" %}</p>
         </div>
-        <a href="{% url 'catalog' %}" class="text-accent fw-semibold" style="font-size:.9rem;">
-            View all →
-        </a>
+        <a href="{% url 'catalog' %}" class="text-accent fw-semibold" style="font-size:.9rem;">{% trans "View all →" %}</a>
     </div>
 
     <div class="row g-4">
@@ -38,7 +32,7 @@
                         {% if product.image %}
                             <img src="{{ product.image.url }}" alt="{{ product.name }}">
                         {% else %}
-                            <div class="product-card__placeholder">No image</div>
+                            <div class="product-card__placeholder">{% trans "No image" %}</div>
                         {% endif %}
                     </div>
                     <div class="product-card__body">
@@ -47,62 +41,57 @@
                         <div class="product-card__desc">{{ product.description|truncatewords:14 }}</div>
                         <div class="product-card__footer">
                             <span class="product-card__price">${{ product.price }}</span>
-                            <a href="{% url 'product' product.slug %}" class="btn-primary-custom" style="padding:.5rem 1.1rem; font-size:.85rem;">View</a>
+                            <a href="{% url 'product' product.slug %}" class="btn-primary-custom" style="padding:.5rem 1.1rem; font-size:.85rem;">{% trans "View" %}</a>
                         </div>
                     </div>
                 </div>
             </div>
         {% empty %}
-            <p class="text-muted-custom">No products yet.</p>
+            <p class="text-muted-custom">{% trans "No products yet." %}</p>
         {% endfor %}
     </div>
 </section>
 
-<!-- Banner strip -->
 <section class="container mt-5">
     <div class="row g-3">
         <div class="col-md-4">
             <div class="p-4 rounded-3 text-center" style="background:#fdf2e9; border:1px solid #f0d9c0;">
                 <div style="font-size:1.8rem; margin-bottom:.5rem;">🌿</div>
-                <div class="fw-semibold mb-1">Natural Ingredients</div>
-                <div style="font-size:.85rem; color:var(--color-muted);">Clean beauty you can trust</div>
+                <div class="fw-semibold mb-1">{% trans "Natural Ingredients" %}</div>
+                <div style="font-size:.85rem; color:var(--color-muted);">{% trans "Clean beauty you can trust" %}</div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="p-4 rounded-3 text-center" style="background:#f3eefa; border:1px solid #ddd0f0;">
                 <div style="font-size:1.8rem; margin-bottom:.5rem;">🚚</div>
-                <div class="fw-semibold mb-1">Free Shipping</div>
-                <div style="font-size:.85rem; color:var(--color-muted);">On orders over $50</div>
+                <div class="fw-semibold mb-1">{% trans "Free Shipping" %}</div>
+                <div style="font-size:.85rem; color:var(--color-muted);">{% trans "On orders over $50" %}</div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="p-4 rounded-3 text-center" style="background:#eaf5f0; border:1px solid #c0e0d3;">
                 <div style="font-size:1.8rem; margin-bottom:.5rem;">↩️</div>
-                <div class="fw-semibold mb-1">Easy Returns</div>
-                <div style="font-size:.85rem; color:var(--color-muted);">30-day hassle-free returns</div>
+                <div class="fw-semibold mb-1">{% trans "Easy Returns" %}</div>
+                <div style="font-size:.85rem; color:var(--color-muted);">{% trans "30-day hassle-free returns" %}</div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Booking CTA -->
 <section class="container mt-5 pt-2 mb-5">
     <div class="row align-items-center g-4" style="background:var(--color-surface); border:1px solid var(--color-border); border-radius:1.25rem; padding:2.5rem;">
         <div class="col-md-7">
-            <p class="text-accent fw-semibold mb-1" style="font-size:.85rem; letter-spacing:.08em; text-transform:uppercase;">Professional Care</p>
-            <h2 class="section-title mb-2">Book a Cosmetology Session</h2>
+            <p class="text-accent fw-semibold mb-1" style="font-size:.85rem; letter-spacing:.08em; text-transform:uppercase;">{% trans "Professional Care" %}</p>
+            <h2 class="section-title mb-2">{% trans "Book a Cosmetology Session" %}</h2>
             <p style="color:var(--color-muted); max-width:480px; line-height:1.65;">
-                Our certified specialists are ready to help you look and feel your best.
-                Choose a service, pick a time — and leave the rest to us.
+                {% trans "Our certified specialists are ready to help you look and feel your best. Choose a service, pick a time — and leave the rest to us." %}
             </p>
             <div class="d-flex gap-3 mt-3">
-                <a href="{% url 'service-list' %}" class="btn-primary-custom">Explore services</a>
-                <a href="{% url 'specialist-list' %}" class="btn-outline-custom">Meet specialists</a>
+                <a href="{% url 'service-list' %}" class="btn-primary-custom">{% trans "Explore services" %}</a>
+                <a href="{% url 'specialist-list' %}" class="btn-outline-custom">{% trans "Meet specialists" %}</a>
             </div>
         </div>
-        <div class="col-md-5 text-center" style="font-size:5rem; opacity:.25;">
-            💆
-        </div>
+        <div class="col-md-5 text-center" style="font-size:5rem; opacity:.25;">💆</div>
     </div>
 </section>
 

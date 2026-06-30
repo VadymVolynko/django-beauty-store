@@ -1,14 +1,15 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}{% if object %}Edit Appointment{% else %}Book Appointment{% endif %} | Beauty Store{% endblock %}
+{% block title %}{% if object %}{% trans "Edit Appointment" %}{% else %}{% trans "Book Appointment" %}{% endif %} | Beauty Store{% endblock %}
 
 {% block content %}
 <div class="container mt-5 mb-5">
     <div class="page-header">
         <h1 class="page-header__title">
-            {% if object %}Edit Appointment{% else %}Book an Appointment{% endif %}
+            {% if object %}{% trans "Edit Appointment" %}{% else %}{% trans "Book an Appointment" %}{% endif %}
         </h1>
-        <p class="page-header__sub">Choose your specialist, service and preferred time</p>
+        <p class="page-header__sub">{% trans "Choose your specialist, service and preferred time" %}</p>
     </div>
 
     <div class="row justify-content-center">
@@ -21,41 +22,41 @@
                 {% endif %}
 
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">Specialist</label>
+                    <label class="form-label fw-semibold">{% trans "Specialist" %}</label>
                     {{ form.specialist }}
                     {% for e in form.specialist.errors %}<div class="field-error">{{ e }}</div>{% endfor %}
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">Service</label>
+                    <label class="form-label fw-semibold">{% trans "Service" %}</label>
                     {{ form.service }}
                     {% for e in form.service.errors %}<div class="field-error">{{ e }}</div>{% endfor %}
                 </div>
 
                 <div class="row g-3 mb-3">
                     <div class="col-sm-6">
-                        <label class="form-label fw-semibold">Date</label>
+                        <label class="form-label fw-semibold">{% trans "Date" %}</label>
                         {{ form.date }}
                         {% for e in form.date.errors %}<div class="field-error">{{ e }}</div>{% endfor %}
                     </div>
                     <div class="col-sm-6">
-                        <label class="form-label fw-semibold">Time</label>
+                        <label class="form-label fw-semibold">{% trans "Time" %}</label>
                         {{ form.time }}
                         {% for e in form.time.errors %}<div class="field-error">{{ e }}</div>{% endfor %}
                     </div>
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label fw-semibold">Comment <span class="text-muted-custom">(optional)</span></label>
+                    <label class="form-label fw-semibold">{% trans "Comment" %} <span class="text-muted-custom">({% trans "optional" %})</span></label>
                     {{ form.comment }}
                     {% for e in form.comment.errors %}<div class="field-error">{{ e }}</div>{% endfor %}
                 </div>
 
                 <div class="d-flex gap-3">
                     <button type="submit" class="btn-primary-custom">
-                        {% if object %}Save changes{% else %}Confirm booking{% endif %}
+                        {% if object %}{% trans "Save changes" %}{% else %}{% trans "Confirm booking" %}{% endif %}
                     </button>
-                    <a href="{% url 'appointment-list' %}" class="btn-outline-custom">Cancel</a>
+                    <a href="{% url 'appointment-list' %}" class="btn-outline-custom">{% trans "Cancel" %}</a>
                 </div>
             </form>
         </div>

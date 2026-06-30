@@ -1,24 +1,24 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Cart | Beauty Store{% endblock %}
+{% block title %}{% trans "Cart" %} | Beauty Store{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="page-header">
-        <h1 class="page-header__title">Shopping Cart</h1>
-        <p class="page-header__sub">{{ cart|length }} item{{ cart|length|pluralize }}</p>
+        <h1 class="page-header__title">{% trans "Shopping Cart" %}</h1>
+        <p class="page-header__sub">{{ cart|length }} {% trans "items" %}</p>
     </div>
 
     {% if cart|length == 0 %}
         <div class="text-center py-5">
             <div style="font-size:3rem; margin-bottom:1rem;">🛒</div>
-            <h3 style="font-family:var(--font-serif);">Your cart is empty</h3>
-            <p class="text-muted-custom mb-4">Discover our products and add something you love.</p>
-            <a href="{% url 'catalog' %}" class="btn-primary-custom">Browse catalog</a>
+            <h3 style="font-family:var(--font-serif);">{% trans "Your cart is empty" %}</h3>
+            <p class="text-muted-custom mb-4">{% trans "Discover our products and add something you love." %}</p>
+            <a href="{% url 'catalog' %}" class="btn-primary-custom">{% trans "Browse catalog" %}</a>
         </div>
     {% else %}
         <div class="row g-4">
-            <!-- Items -->
             <div class="col-lg-8">
                 {% for item in cart %}
                     <div class="cart-item">
@@ -27,7 +27,7 @@
                         {% else %}
                             <div class="cart-item__img d-flex align-items-center justify-content-center"
                                  style="background:#f5f0ea;">
-                                <span style="font-size:.75rem; color:var(--color-muted);">No img</span>
+                                <span style="font-size:.75rem; color:var(--color-muted);">{% trans "No image" %}</span>
                             </div>
                         {% endif %}
 
@@ -35,7 +35,7 @@
                             <div class="cart-item__name">
                                 <a href="{% url 'product' item.slug %}">{{ item.name }}</a>
                             </div>
-                            <div class="cart-item__price">${{ item.price }} each</div>
+                            <div class="cart-item__price">${{ item.price }} {% trans "each" %}</div>
                         </div>
 
                         <form method="post" action="{% url 'cart-update' item.id %}"
@@ -43,7 +43,7 @@
                             {% csrf_token %}
                             <input type="number" name="quantity" value="{{ item.quantity }}"
                                    min="1" max="99" class="form-control qty-input">
-                            <button type="submit" class="btn-outline-custom" style="padding:.45rem .9rem; font-size:.82rem;">Update</button>
+                            <button type="submit" class="btn-outline-custom" style="padding:.45rem .9rem; font-size:.82rem;">{% trans "Update" %}</button>
                         </form>
 
                         <div class="cart-item__total">${{ item.total|floatformat:2 }}</div>
@@ -51,37 +51,29 @@
                         <form method="post" action="{% url 'cart-remove' item.id %}">
                             {% csrf_token %}
                             <button type="submit" class="btn-outline-custom"
-                                    style="padding:.45rem .7rem; font-size:.85rem; color:var(--color-error); border-color:var(--color-error);">
-                                ✕
-                            </button>
+                                    style="padding:.45rem .7rem; font-size:.85rem; color:var(--color-error); border-color:var(--color-error);">✕</button>
                         </form>
                     </div>
                 {% endfor %}
             </div>
 
-            <!-- Summary -->
             <div class="col-lg-4">
                 <div class="cart-summary">
-                    <div class="cart-summary__title">Order Summary</div>
-
+                    <div class="cart-summary__title">{% trans "Order Summary" %}</div>
                     <div class="cart-summary__row">
-                        <span>Subtotal</span>
+                        <span>{% trans "Subtotal" %}</span>
                         <span>${{ cart.total_price|floatformat:2 }}</span>
                     </div>
                     <div class="cart-summary__row">
-                        <span>Shipping</span>
-                        <span class="text-accent">Free</span>
+                        <span>{% trans "Shipping" %}</span>
+                        <span class="text-accent">{% trans "Free" %}</span>
                     </div>
-
                     <div class="cart-summary__row cart-summary__total">
-                        <span>Total</span>
+                        <span>{% trans "Total" %}</span>
                         <span>${{ cart.total_price|floatformat:2 }}</span>
                     </div>
-
-                    <a href="{% url 'checkout' %}" class="btn-accent d-block text-center mt-3" style="width:100%;">Checkout</a>
-                    <a href="{% url 'catalog' %}" class="btn-outline-custom d-block text-center mt-2">
-                        Continue shopping
-                    </a>
+                    <a href="{% url 'checkout' %}" class="btn-accent d-block text-center mt-3" style="width:100%;">{% trans "Checkout" %}</a>
+                    <a href="{% url 'catalog' %}" class="btn-outline-custom d-block text-center mt-2">{% trans "Continue shopping" %}</a>
                 </div>
             </div>
         </div>

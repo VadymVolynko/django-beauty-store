@@ -1,0 +1,17 @@
+Hello {{ order.first_name }},
+
+Thank you for your order! Here are the details:
+
+Order #{{ order.pk }}
+Date: {{ order.created_at|date:"F j, Y" }}
+
+Items:
+{% for item in order.items.all %}  - {{ item.name }} × {{ item.quantity }}  ${{ item.total }}
+{% endfor %}
+Total: ${{ order.total_price }}
+
+Ship to: {{ order.address }}, {{ order.city }}, {{ order.postal_code }}
+
+We will process your order shortly.
+
+— Beauty Store

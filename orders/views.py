@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 
 from cart.cart import Cart
 from orders.forms import CheckoutForm
@@ -45,6 +47,16 @@ def checkout_view(request):
             )
 
         cart.clear()
+
+        body = render_to_string("orders/email_confirmation.txt", {"order": order})
+        send_mail(
+            subject=f"Order #{order.pk} confirmed — Beauty Store",
+            message=body,
+            from_email=None,
+            recipient_list=[order.email],
+            fail_silently=True,
+        )
+
         return redirect("order-success", pk=order.pk)
 
     return render(request, "orders/checkout.html", {"form": form, "cart": cart})

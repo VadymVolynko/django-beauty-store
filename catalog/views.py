@@ -1,6 +1,8 @@
-from django.shortcuts import get_object_or_404, render
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
 
 from catalog.models import Brand, Category, Product
+from reviews.forms import ReviewForm
 
 
 def home_view(request):
@@ -37,5 +39,27 @@ def catalog_view(request):
 
 def product_view(request, slug):
     product = get_object_or_404(Product, slug=slug)
-    return render(request, "catalog/product.html", {"product": product})
+    reviews = product.reviews.select_related("user")
+
+    user_review = None
+    review_form = None
+
+    if request.user.is_authenticated:
+        user_review = reviews.filter(user=request.user).first()
+        if not user_review:
+            review_form = ReviewForm(request.POST or None)
+            if request.method == "POST" and review_form.is_valid():
+                review = review_form.save(commit=False)
+                review.product = product
+                review.user = request.user
+                review.save()
+                messages.success(request, "Your review has been posted.")
+                return redirect("product", slug=slug)
+
+    return render(request, "catalog/product.html", {
+        "product": product,
+        "reviews": reviews,
+        "review_form": review_form,
+        "user_review": user_review,
+    })
 

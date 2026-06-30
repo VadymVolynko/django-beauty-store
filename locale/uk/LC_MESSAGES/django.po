@@ -1,0 +1,463 @@
+# Ukrainian translations for django-beauty-store
+msgid ""
+msgstr ""
+"Project-Id-Version: django-beauty-store\n"
+"POT-Creation-Date: 2026-06-29 00:00+0000\n"
+"PO-Revision-Date: 2026-06-29 00:00+0000\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+# Navbar
+msgid "Home"
+msgstr "Головна"
+
+msgid "Catalog"
+msgstr "Каталог"
+
+msgid "Services"
+msgstr "Послуги"
+
+msgid "Specialists"
+msgstr "Спеціалісти"
+
+msgid "Cart"
+msgstr "Кошик"
+
+msgid "Wishlist"
+msgstr "Обране"
+
+msgid "My Bookings"
+msgstr "Мої записи"
+
+msgid "Login"
+msgstr "Увійти"
+
+msgid "Logout"
+msgstr "Вийти"
+
+msgid "Language"
+msgstr "Мова"
+
+msgid "Profile"
+msgstr "Профіль"
+
+msgid "My Orders"
+msgstr "Мої замовлення"
+
+# Footer
+msgid "Discover cosmetics for your daily beauty routine."
+msgstr "Відкрийте косметику для вашого щоденного ритуалу краси."
+
+msgid "Shop"
+msgstr "Магазин"
+
+msgid "All Products"
+msgstr "Всі товари"
+
+msgid "Booking"
+msgstr "Бронювання"
+
+msgid "Book now"
+msgstr "Записатись"
+
+msgid "Account"
+msgstr "Акаунт"
+
+msgid "Register"
+msgstr "Реєстрація"
+
+msgid "All rights reserved."
+msgstr "Всі права захищені."
+
+# Home
+msgid "New collection 2026"
+msgstr "Нова колекція 2026"
+
+msgid "Your Daily Beauty Ritual"
+msgstr "Ваш щоденний ритуал краси"
+
+msgid "Premium cosmetics and skincare for every skin type. Discover what works for you."
+msgstr "Преміальна косметика та догляд за шкірою для будь-якого типу шкіри. Знайдіть те, що підходить саме вам."
+
+msgid "Shop now"
+msgstr "В магазин"
+
+msgid "Popular Products"
+msgstr "Популярні товари"
+
+msgid "Handpicked favourites from our catalog"
+msgstr "Вибрані улюбленці з нашого каталогу"
+
+msgid "View all →"
+msgstr "Дивитись все →"
+
+msgid "No image"
+msgstr "Немає фото"
+
+msgid "No products yet."
+msgstr "Товарів ще немає."
+
+msgid "View"
+msgstr "Переглянути"
+
+msgid "Natural Ingredients"
+msgstr "Натуральні інгредієнти"
+
+msgid "Clean beauty you can trust"
+msgstr "Чиста краса, якій можна довіряти"
+
+msgid "Free Shipping"
+msgstr "Безкоштовна доставка"
+
+msgid "On orders over $50"
+msgstr "При замовленні від $50"
+
+msgid "Easy Returns"
+msgstr "Легке повернення"
+
+msgid "30-day hassle-free returns"
+msgstr "30-денне повернення без клопоту"
+
+msgid "Professional Care"
+msgstr "Професійний догляд"
+
+msgid "Book a Cosmetology Session"
+msgstr "Запишіться на косметологічну сесію"
+
+msgid "Our certified specialists are ready to help you look and feel your best. Choose a service, pick a time — and leave the rest to us."
+msgstr "Наші сертифіковані спеціалісти готові допомогти вам виглядати та почуватись найкраще. Оберіть послугу, виберіть час — решту залиште нам."
+
+msgid "Explore services"
+msgstr "Переглянути послуги"
+
+msgid "Meet specialists"
+msgstr "Наші спеціалісти"
+
+# Catalog
+msgid "products found"
+msgstr "товарів знайдено"
+
+msgid "Search"
+msgstr "Пошук"
+
+msgid "Product name…"
+msgstr "Назва товару..."
+
+msgid "Category"
+msgstr "Категорія"
+
+msgid "All categories"
+msgstr "Всі категорії"
+
+msgid "Brand"
+msgstr "Бренд"
+
+msgid "All brands"
+msgstr "Всі бренди"
+
+msgid "Filter"
+msgstr "Фільтр"
+
+msgid "No products found."
+msgstr "Товарів не знайдено."
+
+msgid "Clear filters"
+msgstr "Скинути фільтри"
+
+# Product
+msgid "Back to catalog"
+msgstr "Назад до каталогу"
+
+msgid "Out of stock"
+msgstr "Немає в наявності"
+
+msgid "In stock — %(stock)s available"
+msgstr "В наявності — %(stock)s шт."
+
+msgid "Add to cart"
+msgstr "В кошик"
+
+msgid "Add to wishlist"
+msgstr "В обране"
+
+msgid "Reviews (%(count)s)"
+msgstr "Відгуки (%(count)s)"
+
+msgid "Leave a review"
+msgstr "Залишити відгук"
+
+msgid "Rating"
+msgstr "Оцінка"
+
+msgid "Your review"
+msgstr "Ваш відгук"
+
+msgid "Submit review"
+msgstr "Відправити відгук"
+
+msgid "You have already reviewed this product."
+msgstr "Ви вже залишили відгук на цей товар."
+
+msgid "Log in"
+msgstr "Увійдіть"
+
+msgid "to leave a review."
+msgstr "щоб залишити відгук."
+
+msgid "No reviews yet. Be the first!"
+msgstr "Відгуків ще немає. Будьте першим!"
+
+# Cart
+msgid "Shopping Cart"
+msgstr "Кошик"
+
+msgid "items"
+msgstr "товарів"
+
+msgid "Your cart is empty"
+msgstr "Ваш кошик порожній"
+
+msgid "Discover our products and add something you love."
+msgstr "Знайдіть щось для себе в нашому каталозі."
+
+msgid "Browse catalog"
+msgstr "В каталог"
+
+msgid "each"
+msgstr "за шт."
+
+msgid "Update"
+msgstr "Оновити"
+
+msgid "Order Summary"
+msgstr "Підсумок замовлення"
+
+msgid "Subtotal"
+msgstr "Проміжний підсумок"
+
+msgid "Shipping"
+msgstr "Доставка"
+
+msgid "Free"
+msgstr "Безкоштовно"
+
+msgid "Total"
+msgstr "Разом"
+
+msgid "Checkout"
+msgstr "Оформити"
+
+msgid "Continue shopping"
+msgstr "Продовжити покупки"
+
+# Checkout
+msgid "Contact information"
+msgstr "Контактна інформація"
+
+msgid "First name"
+msgstr "Ім'я"
+
+msgid "Last name"
+msgstr "Прізвище"
+
+msgid "Email"
+msgstr "Електронна пошта"
+
+msgid "Phone"
+msgstr "Телефон"
+
+msgid "Shipping address"
+msgstr "Адреса доставки"
+
+msgid "Address"
+msgstr "Адреса"
+
+msgid "City"
+msgstr "Місто"
+
+msgid "Postal code"
+msgstr "Поштовий індекс"
+
+msgid "Your order"
+msgstr "Ваше замовлення"
+
+msgid "Place order"
+msgstr "Підтвердити замовлення"
+
+msgid "Back to cart"
+msgstr "Назад до кошика"
+
+# Order success
+msgid "Order Confirmed"
+msgstr "Замовлення підтверджено"
+
+msgid "Order confirmed!"
+msgstr "Замовлення підтверджено!"
+
+msgid "Thank you, %(name)s. We've received your order and will process it shortly."
+msgstr "Дякуємо, %(name)s! Ми отримали ваше замовлення та обробимо його найближчим часом."
+
+msgid "Order number"
+msgstr "Номер замовлення"
+
+msgid "Date"
+msgstr "Дата"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Ship to"
+msgstr "Доставка"
+
+msgid "Continue shopping"
+msgstr "Продовжити покупки"
+
+msgid "My orders"
+msgstr "Мої замовлення"
+
+# Order history
+msgid "orders"
+msgstr "замовлень"
+
+msgid "Order #%(pk)s"
+msgstr "Замовлення #%(pk)s"
+
+msgid "No orders yet"
+msgstr "Замовлень ще немає"
+
+msgid "Place your first order to see it here."
+msgstr "Оформіть перше замовлення, щоб побачити його тут."
+
+# Services
+msgid "Our Services"
+msgstr "Наші послуги"
+
+msgid "Professional cosmetology treatments for every need"
+msgstr "Професійні косметологічні процедури для будь-якої потреби"
+
+msgid "min"
+msgstr "хв"
+
+msgid "No services available yet."
+msgstr "Послуг ще немає."
+
+# Specialists
+msgid "Our Specialists"
+msgstr "Наші спеціалісти"
+
+msgid "Meet our experienced beauty professionals"
+msgstr "Познайомтесь з нашими досвідченими фахівцями з краси"
+
+msgid "No photo"
+msgstr "Немає фото"
+
+msgid "%(exp)s years experience"
+msgstr "%(exp)s років досвіду"
+
+msgid "Book appointment"
+msgstr "Записатись"
+
+msgid "No specialists available yet."
+msgstr "Спеціалістів ще немає."
+
+# Appointments
+msgid "My Appointments"
+msgstr "Мої записи"
+
+msgid "Track and manage your bookings"
+msgstr "Відстежуйте та керуйте своїми записами"
+
+msgid "New booking"
+msgstr "Новий запис"
+
+msgid "at"
+msgstr "о"
+
+msgid "with"
+msgstr "зі спеціалістом"
+
+msgid "Edit"
+msgstr "Редагувати"
+
+msgid "Cancel"
+msgstr "Скасувати"
+
+msgid "You have no appointments yet."
+msgstr "У вас ще немає записів."
+
+msgid "Book your first appointment"
+msgstr "Записатись на перший прийом"
+
+msgid "Book Appointment"
+msgstr "Запис на прийом"
+
+msgid "Edit Appointment"
+msgstr "Редагувати запис"
+
+msgid "Book an Appointment"
+msgstr "Записатись на прийом"
+
+msgid "Choose your specialist, service and preferred time"
+msgstr "Оберіть спеціаліста, послугу та зручний час"
+
+msgid "Specialist"
+msgstr "Спеціаліст"
+
+msgid "Service"
+msgstr "Послуга"
+
+msgid "Time"
+msgstr "Час"
+
+msgid "Comment"
+msgstr "Коментар"
+
+msgid "optional"
+msgstr "необов'язково"
+
+msgid "Save changes"
+msgstr "Зберегти зміни"
+
+msgid "Confirm booking"
+msgstr "Підтвердити запис"
+
+msgid "Cancel Appointment"
+msgstr "Скасування запису"
+
+msgid "Cancel appointment?"
+msgstr "Скасувати запис?"
+
+msgid "Yes, cancel it"
+msgstr "Так, скасувати"
+
+msgid "Keep it"
+msgstr "Залишити"
+
+# Wishlist
+msgid "My Wishlist"
+msgstr "Моє обране"
+
+msgid "Your wishlist is empty."
+msgstr "Ваше обране порожнє."
+
+msgid "Remove"
+msgstr "Видалити"
+
+# Profile
+msgid "My Profile"
+msgstr "Мій профіль"
+
+msgid "Username"
+msgstr "Ім'я користувача"
+
+msgid "Member since"
+msgstr "Учасник з"
+
+msgid "My Appointments"
+msgstr "Мої записи"
+
+msgid "My Wishlist"
+msgstr "Моє обране"

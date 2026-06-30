@@ -1,26 +1,26 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Catalog | Beauty Store{% endblock %}
+{% block title %}{% trans "Catalog" %} | Beauty Store{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="page-header">
-        <h1 class="page-header__title">Catalog</h1>
-        <p class="page-header__sub">{{ products|length }} product{{ products|length|pluralize }} found</p>
+        <h1 class="page-header__title">{% trans "Catalog" %}</h1>
+        <p class="page-header__sub">{{ products|length }} {% trans "products found" %}</p>
     </div>
 
-    <!-- Filters -->
     <form method="get" class="mb-4">
         <div class="row g-2 align-items-end">
             <div class="col-sm-4">
-                <label class="form-label-custom mb-1">Search</label>
+                <label class="form-label-custom mb-1">{% trans "Search" %}</label>
                 <input type="text" name="q" value="{{ query }}"
-                       class="form-control-custom" placeholder="Product name…">
+                       class="form-control-custom" placeholder="{% trans "Product name…" %}">
             </div>
             <div class="col-sm-3">
-                <label class="form-label-custom mb-1">Category</label>
+                <label class="form-label-custom mb-1">{% trans "Category" %}</label>
                 <select name="category" class="form-control-custom">
-                    <option value="">All categories</option>
+                    <option value="">{% trans "All categories" %}</option>
                     {% for cat in categories %}
                         <option value="{{ cat.slug }}" {% if selected_category == cat.slug %}selected{% endif %}>
                             {{ cat.name }}
@@ -29,9 +29,9 @@
                 </select>
             </div>
             <div class="col-sm-3">
-                <label class="form-label-custom mb-1">Brand</label>
+                <label class="form-label-custom mb-1">{% trans "Brand" %}</label>
                 <select name="brand" class="form-control-custom">
-                    <option value="">All brands</option>
+                    <option value="">{% trans "All brands" %}</option>
                     {% for brand in brands %}
                         <option value="{{ brand.slug }}" {% if selected_brand == brand.slug %}selected{% endif %}>
                             {{ brand.name }}
@@ -40,7 +40,7 @@
                 </select>
             </div>
             <div class="col-sm-2 d-flex gap-2">
-                <button type="submit" class="btn-primary-custom" style="padding:.55rem 1rem;">Filter</button>
+                <button type="submit" class="btn-primary-custom" style="padding:.55rem 1rem;">{% trans "Filter" %}</button>
                 {% if query or selected_category or selected_brand %}
                     <a href="{% url 'catalog' %}" class="btn-outline-custom" style="padding:.55rem 1rem;">✕</a>
                 {% endif %}
@@ -48,7 +48,6 @@
         </div>
     </form>
 
-    <!-- Products grid -->
     <div class="row g-4">
         {% for product in products %}
             <div class="col-sm-6 col-lg-4">
@@ -57,7 +56,7 @@
                         {% if product.image %}
                             <img src="{{ product.image.url }}" alt="{{ product.name }}">
                         {% else %}
-                            <div class="product-card__placeholder">No image</div>
+                            <div class="product-card__placeholder">{% trans "No image" %}</div>
                         {% endif %}
                     </div>
                     <div class="product-card__body">
@@ -67,15 +66,15 @@
                         <div class="product-card__footer">
                             <span class="product-card__price">${{ product.price }}</span>
                             <a href="{% url 'product' product.slug %}" class="btn-primary-custom"
-                               style="padding:.5rem 1.1rem; font-size:.85rem;">View</a>
+                               style="padding:.5rem 1.1rem; font-size:.85rem;">{% trans "View" %}</a>
                         </div>
                     </div>
                 </div>
             </div>
         {% empty %}
             <div class="col-12 text-center py-5">
-                <p class="text-muted-custom mb-3">No products found.</p>
-                <a href="{% url 'catalog' %}" class="btn-outline-custom">Clear filters</a>
+                <p class="text-muted-custom mb-3">{% trans "No products found." %}</p>
+                <a href="{% url 'catalog' %}" class="btn-outline-custom">{% trans "Clear filters" %}</a>
             </div>
         {% endfor %}
     </div>

@@ -1,4 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -31,7 +33,17 @@ class AppointmentCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        appointment = self.object
+        body = render_to_string("booking/email_confirmation.txt", {"appointment": appointment})
+        send_mail(
+            subject=f"Appointment confirmed — {appointment.service.name}",
+            message=body,
+            from_email=None,
+            recipient_list=[appointment.user.email],
+            fail_silently=True,
+        )
+        return response
 
 
 class AppointmentListView(LoginRequiredMixin, ListView):

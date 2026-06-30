@@ -1,15 +1,16 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}My Appointments | Beauty Store{% endblock %}
+{% block title %}{% trans "My Appointments" %} | Beauty Store{% endblock %}
 
 {% block content %}
 <div class="container mt-4 mb-5">
     <div class="page-header d-flex align-items-center justify-content-between">
         <div>
-            <h1 class="page-header__title mb-0">My Appointments</h1>
-            <p class="page-header__sub mb-0">Track and manage your bookings</p>
+            <h1 class="page-header__title mb-0">{% trans "My Appointments" %}</h1>
+            <p class="page-header__sub mb-0">{% trans "Track and manage your bookings" %}</p>
         </div>
-        <a href="{% url 'appointment-create' %}" class="btn-primary-custom">+ New booking</a>
+        <a href="{% url 'appointment-create' %}" class="btn-primary-custom">+ {% trans "New booking" %}</a>
     </div>
 
     {% if appointments %}
@@ -19,10 +20,10 @@
                     <div class="product-card">
                         <div class="product-card__body">
                             <div class="product-card__brand">
-                                {{ appt.date }} at {{ appt.time|time:"H:i" }}
+                                {{ appt.date }} {% trans "at" %} {{ appt.time|time:"H:i" }}
                             </div>
                             <div class="product-card__name">{{ appt.service.name }}</div>
-                            <div class="product-card__desc">with {{ appt.specialist.name }}</div>
+                            <div class="product-card__desc">{% trans "with" %} {{ appt.specialist.name }}</div>
 
                             <div class="my-2">
                                 <span class="badge
@@ -45,11 +46,11 @@
                                 <div class="d-flex gap-2 mt-3">
                                     <a href="{% url 'appointment-update' appt.pk %}"
                                        class="btn-primary-custom" style="padding:.4rem .9rem; font-size:.82rem;">
-                                        Edit
+                                        {% trans "Edit" %}
                                     </a>
                                     <a href="{% url 'appointment-delete' appt.pk %}"
                                        class="btn-outline-custom" style="padding:.4rem .9rem; font-size:.82rem; color:#c0392b; border-color:#c0392b;">
-                                        Cancel
+                                        {% trans "Cancel" %}
                                     </a>
                                 </div>
                             {% endif %}
@@ -60,8 +61,8 @@
         </div>
     {% else %}
         <div class="text-center py-5">
-            <p class="text-muted-custom mb-3">You have no appointments yet.</p>
-            <a href="{% url 'appointment-create' %}" class="btn-primary-custom">Book your first appointment</a>
+            <p class="text-muted-custom mb-3">{% trans "You have no appointments yet." %}</p>
+            <a href="{% url 'appointment-create' %}" class="btn-primary-custom">{% trans "Book your first appointment" %}</a>
         </div>
     {% endif %}
 </div>
