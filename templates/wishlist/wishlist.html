@@ -26,7 +26,7 @@
                             <div class="product-card__brand">{{ item.product.brand.name }}</div>
                             <div class="product-card__name">{{ item.product.name }}</div>
                             <div class="product-card__footer">
-                                <span class="product-card__price">${{ item.product.price }}</span>
+                                <span class="product-card__price">{{ item.product.price }} грн</span>
                                 <div class="d-flex gap-2">
                                     <a href="{% url 'product' item.product.slug %}" class="btn-primary-custom"
                                        style="padding:.5rem 1rem; font-size:.85rem;">{% trans "View" %}</a>

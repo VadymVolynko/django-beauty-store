@@ -6,9 +6,9 @@ Order #{{ order.pk }}
 Date: {{ order.created_at|date:"F j, Y" }}
 
 Items:
-{% for item in order.items.all %}  - {{ item.name }} × {{ item.quantity }}  ${{ item.total }}
+{% for item in order.items.all %}  - {{ item.name }} × {{ item.quantity }}  {{ item.total }} грн
 {% endfor %}
-Total: ${{ order.total_price }}
+Total: {{ order.total_price }} грн
 
 Ship to: {{ order.address }}, {{ order.city }}, {{ order.postal_code }}
 

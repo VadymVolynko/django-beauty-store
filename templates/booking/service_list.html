@@ -19,7 +19,7 @@
                         <div class="product-card__name">{{ service.name }}</div>
                         <div class="product-card__desc">{{ service.description|truncatewords:20 }}</div>
                         <div class="product-card__footer">
-                            <span class="product-card__price">${{ service.price }}</span>
+                            <span class="product-card__price">{{ service.price }} грн</span>
                             <a href="{% url 'appointment-create' %}?service={{ service.pk }}"
                                class="btn-primary-custom" style="padding:.5rem 1.1rem; font-size:.85rem;">
                                 {% trans "Book now" %}

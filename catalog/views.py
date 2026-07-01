@@ -6,6 +6,9 @@ from reviews.forms import ReviewForm
 
 
 def home_view(request):
+    if not request.user.is_authenticated and not request.session.get("owner_access"):
+        return redirect("login")
+
     products = Product.objects.filter(is_available=True).select_related("brand")[:6]
     return render(request, "catalog/home.html", {"products": products})
 

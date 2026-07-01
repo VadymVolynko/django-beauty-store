@@ -1,0 +1,55 @@
+{
+  "workflow_version": "1.2.0",
+  "timestamps": {
+    "started": "2026-07-01T12:42:00+03:00",
+    "last_updated": "2026-07-01T12:42:00+03:00",
+    "completed": "2026-07-01T12:42:00+03:00"
+  },
+  "mode": "initial_scan",
+  "scan_level": "deep",
+  "project_root": "C:\\Users\\user\\Desktop\\Mate\\django-beauty-store",
+  "project_knowledge": "docs",
+  "completed_steps": [
+    {
+      "step": "step_1",
+      "status": "completed",
+      "summary": "Classified project as a Django monolith with one backend/server-rendered web application."
+    },
+    {
+      "step": "step_2",
+      "status": "completed",
+      "summary": "Found existing README.md and generated BMAD docs under docs/."
+    },
+    {
+      "step": "step_3",
+      "status": "completed",
+      "summary": "Detected Python 3.12, Django 6.0.6, SQLite, Pillow, python-decouple, Bootstrap templates."
+    },
+    {
+      "step": "step_4",
+      "status": "completed",
+      "summary": "Reviewed Django apps, URLs, models, forms, and views; identified security, money, booking, redirect, and test coverage risks."
+    },
+    {
+      "step": "step_12",
+      "status": "completed",
+      "summary": "Ran manage.py check and manage.py test; system check passed and test runner found 0 tests."
+    }
+  ],
+  "current_step": "completed",
+  "project_types": [
+    {
+      "part_id": "django-beauty-store",
+      "project_type_id": "web",
+      "display_name": "Django monolith"
+    }
+  ],
+  "outputs_generated": [
+    "docs/index.md",
+    "docs/project-overview.md",
+    "docs/data-models.md",
+    "docs/test-strategy.md",
+    "docs/project-scan-report.json"
+  ]
+}
+

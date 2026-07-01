@@ -7,17 +7,16 @@
 <div class="container mt-5">
 
     <a href="{% url 'catalog' %}" class="text-muted-custom d-inline-flex align-items-center gap-1 mb-4" style="font-size:.875rem;">
-        ← {% trans "Back to catalog" %}
+        &larr; {% trans "Back to catalog" %}
     </a>
 
     <div class="row g-5">
         <div class="col-md-5">
             {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}"
-                     class="product-detail__img shadow-sm">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-detail__img shadow-sm">
             {% else %}
                 <div class="rounded-3 d-flex align-items-center justify-content-center"
-                     style="height:400px; background:#f5f0ea; border:1px solid var(--color-border);">
+                     style="height:400px; background:var(--color-soft); border:1px solid var(--color-border);">
                     <span class="text-muted-custom">{% trans "No image" %}</span>
                 </div>
             {% endif %}
@@ -26,7 +25,7 @@
         <div class="col-md-7">
             <div class="product-detail__brand">{{ product.brand.name }}</div>
             <h1 class="product-detail__name">{{ product.name }}</h1>
-            <div class="product-detail__price">${{ product.price }}</div>
+            <div class="product-detail__price">{{ product.price }} грн</div>
 
             <hr class="product-detail__divider">
 
@@ -36,28 +35,18 @@
                 <span class="stock-badge stock-badge--out">{% trans "Out of stock" %}</span>
             {% else %}
                 <span class="stock-badge stock-badge--in">
-                    {% blocktrans with stock=product.stock %}In stock — {{ stock }} available{% endblocktrans %}
+                    {% blocktrans with stock=product.stock %}In stock - {{ stock }} available{% endblocktrans %}
                 </span>
 
-                <form method="post" action="{% url 'cart-add' product.id %}"
-                      class="d-flex align-items-center gap-3 mt-4">
+                <form method="post" action="{% url 'cart-add' product.id %}" class="d-flex align-items-center gap-3 mt-4">
                     {% csrf_token %}
-                    <input type="number" name="quantity" value="1"
-                           min="1" max="{{ product.stock }}"
-                           class="form-control qty-input">
+                    <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control qty-input">
                     <button type="submit" class="btn-accent">{% trans "Add to cart" %}</button>
                 </form>
-                {% if request.user.is_authenticated %}
-                    <form method="post" action="{% url 'wishlist-add' product.id %}" class="mt-3">
-                        {% csrf_token %}
-                        <button type="submit" class="btn-outline-custom">♡ {% trans "Add to wishlist" %}</button>
-                    </form>
-                {% endif %}
             {% endif %}
         </div>
     </div>
 
-    <!-- Reviews -->
     <div class="row mt-5">
         <div class="col-12">
             <h3 class="mb-4" style="font-family:var(--font-serif);">
@@ -65,7 +54,7 @@
             </h3>
 
             {% if review_form %}
-                <div class="mb-5 p-4 rounded-3" style="border:1px solid var(--color-border); background:var(--color-surface);">
+                <div class="mb-5 p-4 warm-panel">
                     <h5 class="mb-3">{% trans "Leave a review" %}</h5>
                     <form method="post">
                         {% csrf_token %}
@@ -89,15 +78,13 @@
             {% endif %}
 
             {% for review in reviews %}
-                <div class="mb-4 p-4 rounded-3" style="border:1px solid var(--color-border);">
+                <div class="mb-4 p-4 warm-panel">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <strong>{{ review.user.username }}</strong>
                         <span class="text-muted-custom" style="font-size:.8rem;">{{ review.created_at|date:"F j, Y" }}</span>
                     </div>
-                    <div class="mb-2" style="color:#c8a96e; font-size:1.1rem;">
-                        {% for i in "12345" %}
-                            {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
-                        {% endfor %}
+                    <div class="mb-2" style="color:var(--color-accent); font-size:1.1rem;">
+                        {{ review.rating }}/5
                     </div>
                     <p class="mb-0" style="font-size:.95rem;">{{ review.text }}</p>
                 </div>

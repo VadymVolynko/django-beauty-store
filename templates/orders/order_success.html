@@ -37,13 +37,13 @@
         {% for item in order.items.all %}
             <div class="d-flex justify-content-between mb-2" style="font-size:.9rem;">
                 <span>{{ item.name }} <span class="text-muted-custom">× {{ item.quantity }}</span></span>
-                <span class="fw-semibold">${{ item.total|floatformat:2 }}</span>
+                <span class="fw-semibold">{{ item.total|floatformat:2 }} грн</span>
             </div>
         {% endfor %}
 
         <div class="d-flex justify-content-between mt-3 pt-3" style="border-top:1px solid var(--color-border); font-size:1.1rem; font-weight:700;">
             <span>{% trans "Total" %}</span>
-            <span>${{ order.total_price }}</span>
+            <span>{{ order.total_price }} грн</span>
         </div>
     </div>
 

@@ -76,13 +76,13 @@
                 {% for item in cart %}
                     <div class="d-flex justify-content-between align-items-center mb-2" style="font-size:.9rem;">
                         <span>{{ item.name }} <span class="text-muted-custom">× {{ item.quantity }}</span></span>
-                        <span class="fw-semibold">${{ item.total|floatformat:2 }}</span>
+                        <span class="fw-semibold">{{ item.total|floatformat:2 }} грн</span>
                     </div>
                 {% endfor %}
 
                 <div class="cart-summary__row cart-summary__total mt-3">
                     <span>{% trans "Total" %}</span>
-                    <span>${{ cart.total_price|floatformat:2 }}</span>
+                    <span>{{ cart.total_price|floatformat:2 }} грн</span>
                 </div>
 
                 <button type="submit" form="checkout-form" class="btn-accent mt-4" style="width:100%;">

@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Панель власника | Beauty Store{% endblock %}
+
+{% block content %}
+<div class="container mt-5 owner-dashboard">
+    <div class="page-header">
+        <p class="warm-kicker mb-1">Кабінет власника</p>
+        <h1 class="page-header__title">Панель магазину</h1>
+        <p class="page-header__sub">Замовлення, бронювання, покупки та активність магазину.</p>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="warm-panel owner-stat">
+                <div class="owner-stat__label">Виручка</div>
+                <div class="owner-stat__value">{{ total_revenue|floatformat:2 }} грн</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="warm-panel owner-stat">
+                <div class="owner-stat__label">Замовлення</div>
+                <div class="owner-stat__value">{{ total_orders }}</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="warm-panel owner-stat">
+                <div class="owner-stat__label">Бронювання</div>
+                <div class="owner-stat__value">{{ total_appointments }}</div>
+                <div class="owner-stat__hint">{{ pending_appointments }} в очікуванні</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="warm-panel owner-stat">
+                <div class="owner-stat__label">Продано товарів</div>
+                <div class="owner-stat__value">{{ items_sold }}</div>
+                <div class="owner-stat__hint">{{ total_products }} товарів</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-7">
+            <div class="warm-panel owner-section">
+                <div class="owner-section__head">
+                    <h2>Останні замовлення</h2>
+                    <span>{{ total_orders }} всього</span>
+                </div>
+
+                {% for order in orders %}
+                    <div class="owner-row">
+                        <div>
+                            <div class="owner-row__title">Замовлення #{{ order.pk }} - {{ order.first_name }} {{ order.last_name }}</div>
+                            <div class="owner-row__meta">{{ order.email }} · {{ order.phone }} · {{ order.created_at|date:"M j, Y H:i" }}</div>
+                            <div class="owner-row__items">
+                                {% for item in order.items.all %}
+                                    <span>{{ item.name }} x{{ item.quantity }}</span>
+                                {% empty %}
+                                    <span>Немає товарів</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="owner-row__side">
+                            <strong>{{ order.total_price|floatformat:2 }} грн</strong>
+                            <small>
+                                {% if order.status == "pending" %}Очікує{% elif order.status == "processing" %}В обробці{% elif order.status == "shipped" %}Відправлено{% elif order.status == "delivered" %}Доставлено{% elif order.status == "cancelled" %}Скасовано{% else %}{{ order.get_status_display }}{% endif %}
+                            </small>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-muted-custom mb-0">Замовлень поки немає.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-xl-5">
+            <div class="warm-panel owner-section">
+                <div class="owner-section__head">
+                    <h2>Бронювання</h2>
+                    <span>{{ total_appointments }} всього</span>
+                </div>
+
+                {% for appointment in appointments %}
+                    <div class="owner-row owner-row--compact">
+                        <div>
+                            <div class="owner-row__title">{{ appointment.service.name }}</div>
+                            <div class="owner-row__meta">
+                                {{ appointment.user.email }} · {{ appointment.specialist.name }}
+                            </div>
+                            <div class="owner-row__meta">{{ appointment.date|date:"M j, Y" }} о {{ appointment.time|time:"H:i" }}</div>
+                        </div>
+                        <div class="owner-row__side">
+                            <small>
+                                {% if appointment.status == "pending" %}Очікує{% elif appointment.status == "confirmed" %}Підтверджено{% elif appointment.status == "cancelled" %}Скасовано{% elif appointment.status == "completed" %}Завершено{% else %}{{ appointment.get_status_display }}{% endif %}
+                            </small>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-muted-custom mb-0">Бронювань поки немає.</p>
+                {% endfor %}
+            </div>
+
+            <div class="warm-panel owner-section mt-4">
+                <div class="owner-section__head">
+                    <h2>Популярні покупки</h2>
+                    <span>за кількістю</span>
+                </div>
+
+                {% for item in top_items %}
+                    <div class="owner-row owner-row--compact">
+                        <div>
+                            <div class="owner-row__title">{{ item.name }}</div>
+                            <div class="owner-row__meta">{{ item.orders }} замовлень</div>
+                        </div>
+                        <div class="owner-row__side">
+                            <strong>{{ item.quantity }}</strong>
+                            <small>продано</small>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-muted-custom mb-0">Покупок поки немає.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'owner-logout' %}" class="btn-outline-custom">Вийти з кабінету власника</a>
+    </div>
+</div>
+{% endblock %}
