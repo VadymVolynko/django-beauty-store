@@ -1,22 +1,25 @@
+from hmac import compare_digest
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.mail import send_mail
 from django.db.models import Count, Sum
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import timezone
+from django.utils.translation import gettext as _
 from decouple import config
 
+from accounts.decorators import OWNER_SESSION_KEY, owner_required
 from accounts.forms import RegisterForm
-from accounts.models import EmailVerificationToken
+from accounts.models import EmailVerificationToken, User
 from booking.models import Appointment
 from catalog.models import Product
 from orders.models import Order, OrderItem
 
-OWNER_SESSION_KEY = "owner_access"
 OWNER_LOGIN = config("OWNER_LOGIN", default="")
 OWNER_PASSWORD = config("OWNER_PASSWORD", default="")
 OWNER_PASSWORD_ALIASES = [
@@ -24,6 +27,66 @@ OWNER_PASSWORD_ALIASES = [
     for password in config("OWNER_PASSWORD_ALIASES", default="").split(",")
     if password.strip()
 ]
+OWNER_LOGIN_FAILURES_SESSION_KEY = "owner_login_failures"
+OWNER_LOGIN_LOCKED_UNTIL_SESSION_KEY = "owner_login_locked_until"
+OWNER_LOGIN_MAX_FAILURES = 5
+OWNER_LOGIN_LOCK_SECONDS = 15 * 60
+
+
+def _valid_owner_passwords():
+    passwords = [OWNER_PASSWORD.strip(), *OWNER_PASSWORD_ALIASES]
+    return [password for password in passwords if password]
+
+
+def _owner_credentials_match(identifier, password):
+    owner_login = OWNER_LOGIN.strip().lower()
+    if not owner_login or not identifier:
+        return False
+    if identifier.strip().lower() != owner_login:
+        return False
+    return any(compare_digest(password.strip(), valid) for valid in _valid_owner_passwords())
+
+
+def _owner_login_is_locked(request):
+    locked_until = request.session.get(OWNER_LOGIN_LOCKED_UNTIL_SESSION_KEY)
+    if not locked_until:
+        return False
+    try:
+        locked_until = timezone.datetime.fromisoformat(locked_until)
+    except ValueError:
+        request.session.pop(OWNER_LOGIN_LOCKED_UNTIL_SESSION_KEY, None)
+        request.session.modified = True
+        return False
+    if timezone.is_naive(locked_until):
+        locked_until = timezone.make_aware(locked_until)
+    if timezone.now() < locked_until:
+        return True
+    request.session.pop(OWNER_LOGIN_LOCKED_UNTIL_SESSION_KEY, None)
+    request.session[OWNER_LOGIN_FAILURES_SESSION_KEY] = 0
+    request.session.modified = True
+    return False
+
+
+def _record_owner_login_failure(request):
+    failures = request.session.get(OWNER_LOGIN_FAILURES_SESSION_KEY, 0) + 1
+    request.session[OWNER_LOGIN_FAILURES_SESSION_KEY] = failures
+    if failures >= OWNER_LOGIN_MAX_FAILURES:
+        locked_until = timezone.now() + timezone.timedelta(seconds=OWNER_LOGIN_LOCK_SECONDS)
+        request.session[OWNER_LOGIN_LOCKED_UNTIL_SESSION_KEY] = locked_until.isoformat()
+    request.session.modified = True
+
+
+def _clear_owner_login_failures(request):
+    request.session.pop(OWNER_LOGIN_FAILURES_SESSION_KEY, None)
+    request.session.pop(OWNER_LOGIN_LOCKED_UNTIL_SESSION_KEY, None)
+    request.session.modified = True
+
+
+def _enable_owner_session(request):
+    logout(request)
+    _clear_owner_login_failures(request)
+    request.session[OWNER_SESSION_KEY] = True
+    request.session.set_expiry(60 * 60 * 4)
 
 
 def register_view(request):
@@ -37,6 +100,7 @@ def register_view(request):
         password = form.cleaned_data["password1"]
         first_name = form.cleaned_data.get("first_name", "")
         last_name = form.cleaned_data.get("last_name", "")
+        phone_number = form.cleaned_data.get("phone_number", "")
 
         # Auto-generate a unique username from email prefix
         base = email.split("@")[0][:28]
@@ -52,6 +116,7 @@ def register_view(request):
             password=password,
             first_name=first_name,
             last_name=last_name,
+            phone_number=phone_number,
             is_active=False,
         )
 
@@ -65,7 +130,7 @@ def register_view(request):
             "verify_url": verify_url,
         })
         send_mail(
-            subject="Verify your Beauty Store account",
+            subject=_("Verify your Beauty Store account"),
             message=body,
             from_email=None,
             recipient_list=[email],
@@ -85,29 +150,32 @@ def login_view(request):
     if request.method == "POST":
         email = request.POST.get("email", "").strip().lower()
         password = request.POST.get("password", "")
-        owner_login = OWNER_LOGIN.strip().lower()
-        owner_password = OWNER_PASSWORD.strip()
 
-        valid_owner_passwords = {owner_password, *OWNER_PASSWORD_ALIASES}
-
-        if email == owner_login and password.strip() in valid_owner_passwords:
-            logout(request)
-            request.session[OWNER_SESSION_KEY] = True
-            request.session.set_expiry(60 * 60 * 4)
-            messages.success(request, "Owner access enabled.")
-            return redirect("owner-dashboard")
-        if email == owner_login:
-            error = "Invalid owner password."
+        if email == OWNER_LOGIN.strip().lower():
+            if _owner_login_is_locked(request):
+                error = _("Too many owner login attempts. Please try again later.")
+                return render(request, "accounts/auth.html", {"tab": "login", "error": error})
+            if _owner_credentials_match(email, password):
+                _enable_owner_session(request)
+                messages.success(request, _("Owner access enabled."))
+                return redirect("owner-dashboard")
+            _record_owner_login_failure(request)
+            error = _("Invalid owner credentials.")
             return render(request, "accounts/auth.html", {"tab": "login", "error": error})
+
+        if _owner_credentials_match(email, password):
+            _enable_owner_session(request)
+            messages.success(request, _("Owner access enabled."))
+            return redirect("owner-dashboard")
 
         user = authenticate(request, username=email, password=password)
 
         if user is not None:
             login(request, user)
             name = user.first_name or user.username
-            messages.success(request, f"Welcome back, {name}!")
+            messages.success(request, _("Welcome back, %(name)s!") % {"name": name})
             return redirect(request.GET.get("next", "home"))
-        elif settings.DEBUG and email and password:
+        elif settings.DEBUG and settings.ENABLE_DEMO_LOGIN and email and password:
             user = User.objects.filter(email__iexact=email).first()
             if user is None:
                 base = (email.split("@")[0] or "demo")[:24]
@@ -129,17 +197,17 @@ def login_view(request):
                 user.is_active = True
                 user.save(update_fields=["is_active"])
             login(request, user, backend="accounts.backends.EmailBackend")
-            messages.success(request, "Demo login active. Welcome to the portfolio preview.")
+            messages.success(request, _("Demo login active. Welcome to the portfolio preview."))
             return redirect(request.GET.get("next", "home"))
         else:
             try:
                 u = User.objects.get(email__iexact=email)
                 if not u.is_active:
-                    error = "Please verify your email first. Check your inbox."
+                    error = _("Please verify your email first. Check your inbox.")
                 else:
-                    error = "Invalid email or password."
+                    error = _("Invalid email or password.")
             except User.DoesNotExist:
-                error = "Invalid email or password."
+                error = _("Invalid email or password.")
 
     return render(request, "accounts/auth.html", {"tab": "login", "error": error})
 
@@ -151,7 +219,7 @@ def verify_email_view(request, token):
         user = token_obj.user
         token_obj.delete()
         user.delete()
-        messages.error(request, "Verification link has expired. Please register again.")
+        messages.error(request, _("Verification link has expired. Please register again."))
         return redirect("register")
 
     user = token_obj.user
@@ -160,7 +228,10 @@ def verify_email_view(request, token):
     token_obj.delete()
 
     login(request, user, backend="accounts.backends.EmailBackend")
-    messages.success(request, f"Welcome to Beauty Store, {user.first_name or user.username}!")
+    messages.success(
+        request,
+        _("Welcome to Beauty Store, %(name)s!") % {"name": user.first_name or user.username},
+    )
     return redirect("home")
 
 
@@ -183,20 +254,22 @@ def owner_login_view(request):
         username = request.POST.get("username", "").strip()
         password = request.POST.get("password", "")
 
-        if username == OWNER_LOGIN and password == OWNER_PASSWORD:
-            request.session[OWNER_SESSION_KEY] = True
-            request.session.set_expiry(60 * 60 * 4)
-            messages.success(request, "Owner access enabled.")
+        if _owner_login_is_locked(request):
+            error = _("Too many owner login attempts. Please try again later.")
+            return render(request, "accounts/owner_login.html", {"error": error})
+
+        if _owner_credentials_match(username, password):
+            _enable_owner_session(request)
+            messages.success(request, _("Owner access enabled."))
             return redirect("owner-dashboard")
-        error = "Wrong owner login or password."
+        _record_owner_login_failure(request)
+        error = _("Wrong owner login or password.")
 
     return render(request, "accounts/owner_login.html", {"error": error})
 
 
+@owner_required
 def owner_dashboard_view(request):
-    if not request.session.get(OWNER_SESSION_KEY):
-        return redirect("login")
-
     orders = Order.objects.select_related("user").prefetch_related("items")[:20]
     appointments = Appointment.objects.select_related(
         "user", "specialist", "service"
@@ -225,5 +298,5 @@ def owner_dashboard_view(request):
 
 def owner_logout_view(request):
     request.session.pop(OWNER_SESSION_KEY, None)
-    messages.success(request, "Owner access closed.")
+    messages.success(request, _("Owner access closed."))
     return redirect("login")

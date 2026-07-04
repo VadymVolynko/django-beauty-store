@@ -4,21 +4,21 @@
         <div class="row">
             <div class="col-md-4 mb-4 mb-md-0">
                 <div class="footer__brand">Beauty Store</div>
-                <div class="footer__tagline">Відкрийте косметику для щоденного ритуалу краси.</div>
+                <div class="footer__tagline">{% trans "Discover cosmetics for your daily beauty routine." %}</div>
             </div>
             <div class="col-md-2 mb-4 mb-md-0">
-                <div class="fw-semibold text-white mb-2" style="font-size:.85rem;">Магазин</div>
-                <div><a href="{% url 'catalog' %}" class="d-block mb-1">Усі товари</a></div>
+                <div class="fw-semibold text-white mb-2" style="font-size:.85rem;">{% trans "Shop" %}</div>
+                <div><a href="{% url 'catalog' %}" class="d-block mb-1">{% trans "All Products" %}</a></div>
                 <div><a href="{% url 'cart' %}" class="d-block">{% trans "Cart" %}</a></div>
             </div>
             <div class="col-md-2 mb-4 mb-md-0">
-                <div class="fw-semibold text-white mb-2" style="font-size:.85rem;">Бронювання</div>
+                <div class="fw-semibold text-white mb-2" style="font-size:.85rem;">{% trans "Booking" %}</div>
                 <div><a href="{% url 'service-list' %}" class="d-block mb-1">{% trans "Services" %}</a></div>
                 <div><a href="{% url 'specialist-list' %}" class="d-block mb-1">{% trans "Specialists" %}</a></div>
-                <div><a href="{% url 'appointment-create' %}" class="d-block">Записатися</a></div>
+                <div><a href="{% url 'appointment-create' %}" class="d-block">{% trans "Book now" %}</a></div>
             </div>
             <div class="col-md-4">
-                <div class="fw-semibold text-white mb-2" style="font-size:.85rem;">Акаунт</div>
+                <div class="fw-semibold text-white mb-2" style="font-size:.85rem;">{% trans "Account" %}</div>
                 {% if request.user.is_authenticated %}
                     <div><a href="{% url 'profile' %}" class="d-block mb-1">{% trans "Profile" %}</a></div>
                     <div><a href="{% url 'logout' %}" class="d-block">{% trans "Logout" %}</a></div>
@@ -28,6 +28,6 @@
                 {% endif %}
             </div>
         </div>
-        <div class="footer__copy">© 2026 Beauty Store. Усі права захищено.</div>
+        <div class="footer__copy">© 2026 Beauty Store. {% trans "All rights reserved." %}</div>
     </div>
 </footer>

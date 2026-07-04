@@ -1,5 +1,6 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class Service(models.Model):
@@ -29,14 +30,26 @@ class Specialist(models.Model):
         return self.name
 
 
+class SpecialistPhoto(models.Model):
+    specialist = models.ForeignKey(Specialist, on_delete=models.CASCADE, related_name="gallery")
+    image = models.ImageField(upload_to="specialists/gallery/")
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"Photo for {self.specialist.name}"
+
+
 class Appointment(models.Model):
     class Status(models.TextChoices):
-        PENDING   = "pending",   "Pending"
-        CONFIRMED = "confirmed", "Confirmed"
-        CANCELLED = "cancelled", "Cancelled"
-        COMPLETED = "completed", "Completed"
+        PENDING   = "pending",   _("Pending")
+        CONFIRMED = "confirmed", _("Confirmed")
+        CANCELLED = "cancelled", _("Cancelled")
+        COMPLETED = "completed", _("Completed")
 
-    user       = models.ForeignKey(User, on_delete=models.CASCADE, related_name="appointments")
+    user       = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="appointments")
     specialist = models.ForeignKey(Specialist, on_delete=models.CASCADE, related_name="appointments")
     service    = models.ForeignKey(Service, on_delete=models.CASCADE, related_name="appointments")
     date       = models.DateField()

@@ -1,19 +1,20 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from catalog.models import Product
 
 
 class Order(models.Model):
     class Status(models.TextChoices):
-        PENDING    = "pending",    "Pending"
-        PROCESSING = "processing", "Processing"
-        SHIPPED    = "shipped",    "Shipped"
-        DELIVERED  = "delivered",  "Delivered"
-        CANCELLED  = "cancelled",  "Cancelled"
+        PENDING    = "pending",    _("Pending")
+        PROCESSING = "processing", _("Processing")
+        SHIPPED    = "shipped",    _("Shipped")
+        DELIVERED  = "delivered",  _("Delivered")
+        CANCELLED  = "cancelled",  _("Cancelled")
 
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

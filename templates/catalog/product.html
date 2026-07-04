@@ -25,7 +25,7 @@
         <div class="col-md-7">
             <div class="product-detail__brand">{{ product.brand.name }}</div>
             <h1 class="product-detail__name">{{ product.name }}</h1>
-            <div class="product-detail__price">{{ product.price }} грн</div>
+            <div class="product-detail__price">{% blocktrans with amount=product.price %}{{ amount }} UAH{% endblocktrans %}</div>
 
             <hr class="product-detail__divider">
 
@@ -42,6 +42,18 @@
                     {% csrf_token %}
                     <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control qty-input">
                     <button type="submit" class="btn-accent">{% trans "Add to cart" %}</button>
+                </form>
+            {% endif %}
+
+            {% if request.user.is_authenticated %}
+                <form method="post"
+                      action="{% if in_wishlist %}{% url 'wishlist-remove' product.id %}{% else %}{% url 'wishlist-add' product.id %}{% endif %}"
+                      class="mt-3">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{% url 'product' product.slug %}">
+                    <button type="submit" class="btn-outline-custom">
+                        {% if in_wishlist %}{% trans "Remove from wishlist" %}{% else %}{% trans "Add to wishlist" %}{% endif %}
+                    </button>
                 </form>
             {% endif %}
         </div>

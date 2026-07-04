@@ -1,0 +1,18 @@
+{% load i18n %}
+{% if page_obj.paginator.num_pages > 1 %}
+<nav class="d-flex justify-content-center align-items-center gap-3 mt-4" aria-label="{% trans "Pagination" %}">
+    {% if page_obj.has_previous %}
+        <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}"
+           class="btn-outline-custom" style="padding:.4rem .9rem; font-size:.8rem;">&larr; {% trans "Prev" %}</a>
+    {% endif %}
+
+    <span class="text-muted-custom" style="font-size:.85rem;">
+        {% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}
+    </span>
+
+    {% if page_obj.has_next %}
+        <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}"
+           class="btn-outline-custom" style="padding:.4rem .9rem; font-size:.8rem;">{% trans "Next" %} &rarr;</a>
+    {% endif %}
+</nav>
+{% endif %}

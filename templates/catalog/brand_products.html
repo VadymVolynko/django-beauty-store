@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ brand.name }} | Beauty Store{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="{% url 'catalog' %}" class="text-muted-custom d-inline-flex align-items-center gap-1 mb-4" style="font-size:.875rem;">
+        &larr; {% trans "All brands" %}
+    </a>
+
+    <div class="page-header d-flex align-items-center gap-3">
+        {% if brand.image %}
+            <img src="{{ brand.image.url }}" alt="{{ brand.name }}" style="width:64px; height:64px; object-fit:cover; border-radius:12px;">
+        {% endif %}
+        <div>
+            <h1 class="page-header__title mb-1">{{ brand.name }}</h1>
+            <p class="page-header__sub mb-0">{{ page_obj.paginator.count }} {% trans "products found" %}</p>
+        </div>
+    </div>
+
+    {% if brand.description %}
+        <p class="text-muted-custom mb-4" style="max-width:640px;">{{ brand.description }}</p>
+    {% endif %}
+
+    <form method="get" class="mb-4">
+        <div class="row g-2 align-items-end">
+            <div class="col-sm-5">
+                <label class="form-label-custom mb-1">{% trans "Search" %}</label>
+                <input type="text" name="q" value="{{ query }}"
+                       class="form-control-custom" placeholder="{% trans "Product name…" %}">
+            </div>
+            <div class="col-sm-4">
+                <label class="form-label-custom mb-1">{% trans "Category" %}</label>
+                <select name="category" class="form-control-custom">
+                    <option value="">{% trans "All categories" %}</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.slug }}" {% if selected_category == cat.slug %}selected{% endif %}>
+                            {{ cat.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-sm-3 d-flex gap-2">
+                <button type="submit" class="btn-primary-custom" style="padding:.55rem 1rem;">{% trans "Filter" %}</button>
+                {% if query or selected_category %}
+                    <a href="{% url 'catalog-brand' brand.slug %}" class="btn-outline-custom" style="padding:.55rem 1rem;">✕</a>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+
+    <div class="row g-4">
+        {% for product in products %}
+            <div class="col-sm-6 col-lg-4">
+                <div class="product-card">
+                    <div class="product-card__img-wrap">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                            <div class="product-card__placeholder">{% trans "No image" %}</div>
+                        {% endif %}
+                    </div>
+                    <div class="product-card__body">
+                        <div class="product-card__brand">{{ product.brand.name }}</div>
+                        <div class="product-card__name">{{ product.name }}</div>
+                        <div class="product-card__desc">{{ product.description|truncatewords:14 }}</div>
+                        <div class="product-card__footer">
+                            <span class="product-card__price">{% blocktrans with amount=product.price %}{{ amount }} UAH{% endblocktrans %}</span>
+                            <a href="{% url 'product' product.slug %}" class="btn-primary-custom"
+                               style="padding:.5rem 1.1rem; font-size:.85rem;">{% trans "View" %}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted-custom mb-3">{% trans "No products found." %}</p>
+                <a href="{% url 'catalog-brand' brand.slug %}" class="btn-outline-custom">{% trans "Clear filters" %}</a>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% include "includes/pagination.html" with page_obj=page_obj %}
+</div>
+{% endblock %}

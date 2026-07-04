@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
+from django.utils.translation import gettext as _
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -17,12 +18,14 @@ class ServiceListView(ListView):
     model = Service
     template_name = "booking/service_list.html"
     context_object_name = "services"
+    paginate_by = 9
 
 
 class SpecialistListView(ListView):
     model = Specialist
     template_name = "booking/specialist_list.html"
     context_object_name = "specialists"
+    paginate_by = 9
 
 
 class AppointmentCreateView(LoginRequiredMixin, CreateView):
@@ -37,7 +40,9 @@ class AppointmentCreateView(LoginRequiredMixin, CreateView):
         appointment = self.object
         body = render_to_string("booking/email_confirmation.txt", {"appointment": appointment})
         send_mail(
-            subject=f"Appointment confirmed — {appointment.service.name}",
+            subject=_("Appointment confirmed - %(service)s") % {
+                "service": appointment.service.name,
+            },
             message=body,
             from_email=None,
             recipient_list=[appointment.user.email],
@@ -50,6 +55,7 @@ class AppointmentListView(LoginRequiredMixin, ListView):
     model = Appointment
     template_name = "booking/appointment_list.html"
     context_object_name = "appointments"
+    paginate_by = 10
 
     def get_queryset(self):
         return Appointment.objects.filter(user=self.request.user).select_related(

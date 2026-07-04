@@ -1,10 +1,10 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
 <html lang="en" data-auth-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if tab == "register" %}Create Account{% else %}Login{% endif %} | Beauty Store</title>
+    <title>{% if tab == "register" %}{% trans "Create Account" %}{% else %}{% trans "Login" %}{% endif %} | Beauty Store</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <style>
         *, *::before, *::after { box-sizing: border-box; }
@@ -577,10 +577,10 @@
 </head>
 <body>
 <main class="auth-shell" id="authShell">
-    <a href="{% url 'home' %}" class="auth-back">Home</a>
+    <a href="{% url 'home' %}" class="auth-back">{% trans "Home" %}</a>
 
     <div class="auth-theme-wrap">
-        <button class="auth-theme-switch" id="authThemeBtn" type="button" aria-label="Switch theme" title="Toggle theme">
+        <button class="auth-theme-switch" id="authThemeBtn" type="button" aria-label="{% trans "Switch theme" %}" title="{% trans "Toggle theme" %}">
             <span class="auth-theme-sky" aria-hidden="true"></span>
             <span class="auth-theme-orb" aria-hidden="true"></span>
             <span class="auth-theme-cloud" aria-hidden="true"></span>
@@ -609,27 +609,27 @@
                 <div class="logo-sub">Paris · Maison de beaute</div>
             </div>
 
-            <nav class="auth-tabs" aria-label="Auth navigation">
-                <a href="{% url 'login' %}" class="{% if tab == 'login' %}active{% endif %}">Login</a>
-                <a href="{% url 'register' %}" class="{% if tab == 'register' %}active{% endif %}">Register</a>
+            <nav class="auth-tabs" aria-label="{% trans "Auth navigation" %}">
+                <a href="{% url 'login' %}" class="{% if tab == 'login' %}active{% endif %}">{% trans "Login" %}</a>
+                <a href="{% url 'register' %}" class="{% if tab == 'register' %}active{% endif %}">{% trans "Register" %}</a>
             </nav>
 
             {% if tab == "login" %}
                 <div class="screen">
-                    <h1 class="screen-title">Welcome</h1>
-                    <div class="screen-sub">Sign in to your account</div>
+                    <h1 class="screen-title">{% trans "Welcome" %}</h1>
+                    <div class="screen-sub">{% trans "Sign in to your account" %}</div>
 
                     <form method="post" action="{% url 'login' %}">
                         {% csrf_token %}
                         <div class="field">
                             <input type="email" name="email" id="login-email" placeholder=" "
                                    value="{{ request.POST.email }}" autocomplete="email" autofocus>
-                            <label for="login-email">Email address</label>
+                            <label for="login-email">{% trans "Email address" %}</label>
                             <div class="field-ul"></div>
                         </div>
                         <div class="field">
                             <input type="password" name="password" id="login-password" placeholder=" " autocomplete="current-password">
-                            <label for="login-password">Password</label>
+                            <label for="login-password">{% trans "Password" %}</label>
                             <div class="field-ul"></div>
                         </div>
 
@@ -639,17 +639,17 @@
                             <div class="auth-error" aria-hidden="true"></div>
                         {% endif %}
 
-                        <button type="submit" class="btn-main">Enter</button>
+                        <button type="submit" class="btn-main">{% trans "Enter" %}</button>
                     </form>
 
-                    <div class="divider-or"><span>or</span></div>
-                    <div class="link-row"><a href="{% url 'register' %}">Create account</a></div>
-                    <div class="link-row"><a href="#">Forgot password?</a></div>
+                    <div class="divider-or"><span>{% trans "or" %}</span></div>
+                    <div class="link-row"><a href="{% url 'register' %}">{% trans "Create account" %}</a></div>
+                    <div class="link-row"><a href="#">{% trans "Forgot password?" %}</a></div>
                 </div>
             {% else %}
                 <div class="screen">
-                    <h1 class="screen-title">Join us</h1>
-                    <div class="screen-sub">Create your account</div>
+                    <h1 class="screen-title">{% trans "Join us" %}</h1>
+                    <div class="screen-sub">{% trans "Create your account" %}</div>
 
                     <form method="post" action="{% url 'register' %}">
                         {% csrf_token %}
@@ -676,11 +676,11 @@
                             {% endfor %}
                         {% endif %}
 
-                        <button type="submit" class="btn-main">Create account</button>
+                        <button type="submit" class="btn-main">{% trans "Create account" %}</button>
                     </form>
 
-                    <div class="divider-or"><span>or</span></div>
-                    <div class="link-row"><a href="{% url 'login' %}">Back to sign in</a></div>
+                    <div class="divider-or"><span>{% trans "or" %}</span></div>
+                    <div class="link-row"><a href="{% url 'login' %}">{% trans "Back to sign in" %}</a></div>
                 </div>
             {% endif %}
         </div>

@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from catalog.models import Product
 
 CART_SESSION_KEY = "cart"
@@ -51,7 +53,7 @@ class Cart:
         for item in self.cart.values():
             yield {
                 **item,
-                "total": float(item["price"]) * item["quantity"],
+                "total": Decimal(item["price"]) * item["quantity"],
             }
 
     def __len__(self):
@@ -59,4 +61,7 @@ class Cart:
 
     @property
     def total_price(self):
-        return sum(float(item["price"]) * item["quantity"] for item in self.cart.values())
+        return sum(
+            Decimal(item["price"]) * item["quantity"]
+            for item in self.cart.values()
+        )

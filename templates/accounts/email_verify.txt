@@ -1,13 +1,13 @@
-Hello{% if user.first_name %} {{ user.first_name }}{% endif %},
+{% load i18n %}{% if user.first_name %}{% blocktrans with first_name=user.first_name %}Hello {{ first_name }},{% endblocktrans %}{% else %}{% trans "Hello," %}{% endif %}
 
-Thank you for registering at Beauty Store.
+{% trans "Thank you for registering at Beauty Store." %}
 
-Please confirm your email address by clicking the link below:
+{% trans "Please confirm your email address by clicking the link below:" %}
 
 {{ verify_url }}
 
-This link is valid for 24 hours.
+{% trans "This link is valid for 24 hours." %}
 
-If you did not create an account, you can ignore this email.
+{% trans "If you did not create an account, you can ignore this email." %}
 
 — Beauty Store

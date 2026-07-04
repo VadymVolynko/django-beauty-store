@@ -7,6 +7,7 @@ import os
 
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
+from django.utils.text import slugify
 
 from booking.models import Appointment, Service, Specialist
 from catalog.models import Brand, Category, Product
@@ -127,14 +128,14 @@ class Command(BaseCommand):
         for cat_name, brand_name, name, desc, price, stock, color in PRODUCTS:
             cat, _ = Category.objects.get_or_create(
                 name=cat_name,
-                defaults={"slug": cat_name.lower()},
+                defaults={"slug": slugify(cat_name)},
             )
             brand, _ = Brand.objects.get_or_create(
                 name=brand_name,
-                defaults={"slug": brand_name.lower().replace("'", "").replace(" ", "-")},
+                defaults={"slug": slugify(brand_name)},
             )
 
-            slug = name.lower().replace(" ", "-").replace("&", "and")
+            slug = slugify(name)
             if Product.objects.filter(slug=slug).exists():
                 self.stdout.write(f"  skip  {name}")
                 continue

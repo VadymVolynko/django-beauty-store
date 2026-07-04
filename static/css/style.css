@@ -642,6 +642,12 @@ img { display: block; max-width: 100%; }
     max-width: 380px;
     box-shadow: var(--shadow-lg);
     animation: slideIn .25s ease;
+    transition: opacity .3s ease, transform .3s ease;
+}
+
+.toast-msg--closing {
+    opacity: 0;
+    transform: translateX(20px);
 }
 
 .toast-msg--success {

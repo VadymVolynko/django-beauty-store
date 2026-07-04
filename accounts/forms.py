@@ -1,38 +1,46 @@
 from django import forms
-from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
+from django.utils.translation import gettext_lazy as _
+
+from accounts.models import User
 
 
 class RegisterForm(forms.Form):
     first_name = forms.CharField(
         max_length=30,
         required=False,
-        label="First name",
+        label=_("First name"),
         widget=forms.TextInput(),
     )
     last_name = forms.CharField(
         max_length=30,
         required=False,
-        label="Last name",
+        label=_("Last name"),
         widget=forms.TextInput(),
     )
     email = forms.EmailField(
-        label="Email",
+        label=_("Email"),
         widget=forms.EmailInput(),
     )
+    phone_number = forms.CharField(
+        max_length=30,
+        required=False,
+        label=_("Phone number"),
+        widget=forms.TextInput(),
+    )
     password1 = forms.CharField(
-        label="Password",
+        label=_("Password"),
         widget=forms.PasswordInput(),
     )
     password2 = forms.CharField(
-        label="Confirm password",
+        label=_("Confirm password"),
         widget=forms.PasswordInput(),
     )
 
     def clean_email(self):
         email = self.cleaned_data["email"].lower()
         if User.objects.filter(email__iexact=email).exists():
-            raise forms.ValidationError("An account with this email already exists.")
+            raise forms.ValidationError(_("An account with this email already exists."))
         return email
 
     def clean(self):
@@ -41,7 +49,7 @@ class RegisterForm(forms.Form):
         p2 = cleaned.get("password2")
         if p1 and p2:
             if p1 != p2:
-                self.add_error("password2", "Passwords do not match.")
+                self.add_error("password2", _("Passwords do not match."))
             else:
                 try:
                     validate_password(p1)

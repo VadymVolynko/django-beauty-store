@@ -14,7 +14,7 @@
         <div class="text-center py-5 warm-panel" style="max-width:620px; margin:0 auto; padding:3rem 2rem;">
             <div class="warm-feature__mark mx-auto" style="width:54px; height:54px;">0</div>
             <h3 style="font-family:var(--font-serif);">{% trans "Your cart is empty" %}</h3>
-            <p class="text-muted-custom mb-4">Перегляньте товари та додайте те, що вам сподобається.</p>
+            <p class="text-muted-custom mb-4">{% trans "Discover our products and add something you love." %}</p>
             <a href="{% url 'catalog' %}" class="btn-primary-custom">{% trans "Browse catalog" %}</a>
         </div>
     {% else %}
@@ -34,7 +34,7 @@
                             <div class="cart-item__name">
                                 <a href="{% url 'product' item.slug %}">{{ item.name }}</a>
                             </div>
-                            <div class="cart-item__price">{{ item.price }} грн {% trans "each" %}</div>
+                            <div class="cart-item__price">{% blocktrans with amount=item.price %}{{ amount }} UAH{% endblocktrans %} {% trans "each" %}</div>
                         </div>
 
                         <form method="post" action="{% url 'cart-update' item.id %}" class="d-flex align-items-center gap-2">
@@ -43,7 +43,7 @@
                             <button type="submit" class="btn-outline-custom" style="padding:.45rem .9rem; font-size:.82rem;">{% trans "Update" %}</button>
                         </form>
 
-                        <div class="cart-item__total">{{ item.total|floatformat:2 }} грн</div>
+                        <div class="cart-item__total">{% blocktrans with amount=item.total|floatformat:2 %}{{ amount }} UAH{% endblocktrans %}</div>
 
                         <form method="post" action="{% url 'cart-remove' item.id %}">
                             {% csrf_token %}
@@ -57,8 +57,8 @@
                 <div class="cart-summary">
                     <div class="cart-summary__title">{% trans "Order Summary" %}</div>
                     <div class="cart-summary__row">
-                        <span>Проміжна сума</span>
-                        <span>{{ cart.total_price|floatformat:2 }} грн</span>
+                        <span>{% trans "Subtotal" %}</span>
+                        <span>{% blocktrans with amount=cart.total_price|floatformat:2 %}{{ amount }} UAH{% endblocktrans %}</span>
                     </div>
                     <div class="cart-summary__row">
                         <span>{% trans "Shipping" %}</span>
@@ -66,7 +66,7 @@
                     </div>
                     <div class="cart-summary__row cart-summary__total">
                         <span>{% trans "Total" %}</span>
-                        <span>{{ cart.total_price|floatformat:2 }} грн</span>
+                        <span>{% blocktrans with amount=cart.total_price|floatformat:2 %}{{ amount }} UAH{% endblocktrans %}</span>
                     </div>
                     <a href="{% url 'checkout' %}" class="btn-accent d-block text-center mt-3" style="width:100%;">{% trans "Checkout" %}</a>
                     <a href="{% url 'catalog' %}" class="btn-outline-custom d-block text-center mt-2">{% trans "Continue shopping" %}</a>

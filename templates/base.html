@@ -1,4 +1,4 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,7 +62,7 @@
     {% for message in messages %}
         <div class="toast-msg toast-msg--{{ message.tags }}">
             {{ message }}
-            <button class="toast-close" onclick="this.parentElement.remove()">✕</button>
+            <button class="toast-close" type="button" aria-label="{% trans "Close" %}">✕</button>
         </div>
     {% endfor %}
 </div>
@@ -115,6 +115,22 @@
             moonIcon.style.display = 'none';
         }
     }
+})();
+</script>
+<script>
+(function () {
+    function closeToast(toast) {
+        if (!toast || toast.classList.contains('toast-msg--closing')) return;
+        toast.classList.add('toast-msg--closing');
+        toast.addEventListener('transitionend', function () { toast.remove(); }, { once: true });
+        setTimeout(function () { toast.remove(); }, 300);
+    }
+
+    document.querySelectorAll('.toast-msg').forEach(function (toast) {
+        var closeBtn = toast.querySelector('.toast-close');
+        closeBtn && closeBtn.addEventListener('click', function () { closeToast(toast); });
+        setTimeout(function () { closeToast(toast); }, 5000);
+    });
 })();
 </script>
 </body>

@@ -15,11 +15,31 @@
             <div class="col-sm-6 col-lg-4">
                 <div class="product-card">
                     <div class="product-card__img-wrap">
-                        {% if specialist.photo %}
-                            <img src="{{ specialist.photo.url }}" alt="{{ specialist.name }}">
-                        {% else %}
-                            <div class="product-card__placeholder">{% trans "No photo" %}</div>
-                        {% endif %}
+                        {% with photos=specialist.gallery.all %}
+                            {% if photos %}
+                                <div id="specialistCarousel{{ specialist.pk }}" class="carousel slide h-100" data-bs-ride="false">
+                                    <div class="carousel-inner h-100">
+                                        {% for photo in photos %}
+                                            <div class="carousel-item h-100 {% if forloop.first %}active{% endif %}">
+                                                <img src="{{ photo.image.url }}" alt="{{ specialist.name }}">
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% if photos|length > 1 %}
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#specialistCarousel{{ specialist.pk }}" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#specialistCarousel{{ specialist.pk }}" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            {% elif specialist.photo %}
+                                <img src="{{ specialist.photo.url }}" alt="{{ specialist.name }}">
+                            {% else %}
+                                <div class="product-card__placeholder">{% trans "No photo" %}</div>
+                            {% endif %}
+                        {% endwith %}
                     </div>
                     <div class="product-card__body">
                         <div class="product-card__brand">
@@ -49,5 +69,7 @@
             </div>
         {% endfor %}
     </div>
+
+    {% include "includes/pagination.html" with page_obj=page_obj %}
 </div>
 {% endblock %}

@@ -13,6 +13,7 @@
         <div class="col-lg-7">
             <form method="post" id="checkout-form">
                 {% csrf_token %}
+                <input type="hidden" name="checkout_token" value="{{ checkout_token }}">
 
                 <h5 style="font-family:var(--font-serif); margin-bottom:1.25rem;">{% trans "Contact information" %}</h5>
 
@@ -75,14 +76,14 @@
 
                 {% for item in cart %}
                     <div class="d-flex justify-content-between align-items-center mb-2" style="font-size:.9rem;">
-                        <span>{{ item.name }} <span class="text-muted-custom">× {{ item.quantity }}</span></span>
-                        <span class="fw-semibold">{{ item.total|floatformat:2 }} грн</span>
+                        <span>{{ item.name }} <span class="text-muted-custom">x {{ item.quantity }}</span></span>
+                        <span class="fw-semibold">{% blocktrans with amount=item.total|floatformat:2 %}{{ amount }} UAH{% endblocktrans %}</span>
                     </div>
                 {% endfor %}
 
                 <div class="cart-summary__row cart-summary__total mt-3">
                     <span>{% trans "Total" %}</span>
-                    <span>{{ cart.total_price|floatformat:2 }} грн</span>
+                    <span>{% blocktrans with amount=cart.total_price|floatformat:2 %}{{ amount }} UAH{% endblocktrans %}</span>
                 </div>
 
                 <button type="submit" form="checkout-form" class="btn-accent mt-4" style="width:100%;">
@@ -90,7 +91,7 @@
                 </button>
 
                 <a href="{% url 'cart' %}" class="btn-outline-custom d-block text-center mt-2">
-                    ← {% trans "Back to cart" %}
+                    &larr; {% trans "Back to cart" %}
                 </a>
             </div>
         </div>

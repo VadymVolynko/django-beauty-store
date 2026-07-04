@@ -1,17 +1,17 @@
-Hello {{ order.first_name }},
+{% load i18n %}{% blocktrans with first_name=order.first_name %}Hello {{ first_name }},{% endblocktrans %}
 
-Thank you for your order! Here are the details:
+{% trans "Thank you for your order! Here are the details:" %}
 
-Order #{{ order.pk }}
-Date: {{ order.created_at|date:"F j, Y" }}
+{% blocktrans with pk=order.pk %}Order #{{ pk }}{% endblocktrans %}
+{% trans "Date:" %} {{ order.created_at|date:"F j, Y" }}
 
-Items:
-{% for item in order.items.all %}  - {{ item.name }} × {{ item.quantity }}  {{ item.total }} грн
+{% trans "Items:" %}
+{% for item in order.items.all %}  - {{ item.name }} × {{ item.quantity }}  {% blocktrans with amount=item.total %}{{ amount }} UAH{% endblocktrans %}
 {% endfor %}
-Total: {{ order.total_price }} грн
+{% blocktrans with amount=order.total_price %}Total: {{ amount }} UAH{% endblocktrans %}
 
-Ship to: {{ order.address }}, {{ order.city }}, {{ order.postal_code }}
+{% blocktrans with address=order.address city=order.city postal_code=order.postal_code %}Ship to: {{ address }}, {{ city }}, {{ postal_code }}{% endblocktrans %}
 
-We will process your order shortly.
+{% trans "We will process your order shortly." %}
 
 — Beauty Store

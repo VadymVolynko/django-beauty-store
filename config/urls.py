@@ -15,6 +15,7 @@ urlpatterns = [
     path("booking/", include("booking.urls")),
     path("", include("cart.urls")),
     path("", include("orders.urls")),
+    path("", include("wishlist.urls")),
 ]
 
 if settings.DEBUG:

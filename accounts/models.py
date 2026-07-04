@@ -1,9 +1,16 @@
 import uuid
 from datetime import timedelta
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
+
+
+class User(AbstractUser):
+    phone_number = models.CharField(max_length=30, blank=True)
+
+    def __str__(self):
+        return self.get_full_name() or self.username
 
 
 class EmailVerificationToken(models.Model):

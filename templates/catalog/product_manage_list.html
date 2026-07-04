@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Products" %} | Beauty Store{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5 owner-dashboard">
+    <div class="page-header d-flex justify-content-between align-items-end flex-wrap gap-3">
+        <div>
+            <p class="warm-kicker mb-1">{% trans "Owner dashboard" %}</p>
+            <h1 class="page-header__title">{% trans "Products" %}</h1>
+            <p class="page-header__sub">{% blocktrans count counter=page_obj.paginator.count %}{{ counter }} product in the catalog.{% plural %}{{ counter }} products in the catalog.{% endblocktrans %}</p>
+        </div>
+        <a href="{% url 'owner-product-add' %}" class="btn-accent">+ {% trans "Add product" %}</a>
+    </div>
+
+    <div class="warm-panel owner-section">
+        {% for product in products %}
+            <div class="owner-row">
+                <div>
+                    <div class="owner-row__title">
+                        {{ product.name }}
+                        {% if product.is_featured %}<span class="text-accent" title="{% trans "Featured on homepage" %}">★</span>{% endif %}
+                    </div>
+                    <div class="owner-row__meta">
+                        {{ product.category.name }} · {{ product.brand.name }} ·
+                        {% if product.is_available %}{% trans "In stock" %}{% else %}{% trans "Unavailable" %}{% endif %}
+                        · {% blocktrans with stock=product.stock %}{{ stock }} left{% endblocktrans %}
+                    </div>
+                </div>
+                <div class="owner-row__side d-flex align-items-center gap-2">
+                    <strong>{% blocktrans with amount=product.price %}{{ amount }} UAH{% endblocktrans %}</strong>
+                    <a href="{% url 'owner-product-edit' product.slug %}" class="btn-outline-custom"
+                       style="padding:.4rem .9rem; font-size:.8rem;">{% trans "Edit" %}</a>
+                    <a href="{% url 'owner-product-delete' product.slug %}" class="btn-outline-custom"
+                       style="padding:.4rem .9rem; font-size:.8rem;">{% trans "Delete" %}</a>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-muted-custom mb-0">{% trans "No products yet." %}</p>
+        {% endfor %}
+    </div>
+
+    {% include "includes/pagination.html" with page_obj=page_obj %}
+
+    <div class="mt-4">
+        <a href="{% url 'owner-dashboard' %}" class="btn-outline-custom">&larr; {% trans "Owner dashboard" %}</a>
+    </div>
+</div>
+{% endblock %}

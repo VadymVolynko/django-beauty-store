@@ -4,9 +4,7 @@ A full-featured beauty e-commerce & booking platform built with Django — a cos
 
 ## Live Demo
 
-> _Screenshot of home page_
->
-> _(add screenshots after running locally)_
+![Home page](docs/screenshots/home.png)
 
 ---
 
@@ -17,20 +15,20 @@ A full-featured beauty e-commerce & booking platform built with Django — a cos
 - Product detail pages with images, ratings, and reviews
 - Wishlist — save / remove products (auth required)
 - Session-based shopping cart (add / update / remove)
-- Checkout flow with delivery details
+- Checkout flow with delivery details, stock validation, inventory decrement, and double-submit protection
 - Order history for authenticated users
 
 **Booking**
 - Browse available cosmetology services with pricing and duration
 - Specialist profiles with photo, bio, gallery, and linked services
-- Book appointments (date + time + comment)
+- Book appointments (date + time + comment) with past-date, specialist-service, and double-booking validation
 - View, edit, and cancel pending appointments from personal cabinet
 
 **Accounts**
 - Registration with email verification (token-based, expires after 24h)
 - Login / logout, personal profile page
 - Order history and appointment list in one place
-- The storefront requires sign-in to browse; in `DEBUG` mode any email/password creates and logs in a throwaway demo account for quick evaluation
+- The storefront requires sign-in to browse; in local portfolio preview mode (`DJANGO_DEBUG=True` and `ENABLE_DEMO_LOGIN=True`) any email/password creates and logs in a throwaway demo account for quick evaluation
 
 **Owner Dashboard**
 - Separate owner login, independent of regular user accounts
@@ -82,7 +80,22 @@ python manage.py populate_db       # optional — seeds sample catalog & booking
 python manage.py runserver
 ```
 
-Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser. The storefront requires sign-in — in development (`DJANGO_DEBUG=True`) any email/password combination logs you in as a demo user, or sign in with your `OWNER_LOGIN` / `OWNER_PASSWORD` for the owner dashboard.
+Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser. The storefront requires sign-in — in local portfolio preview mode (`DJANGO_DEBUG=True` and `ENABLE_DEMO_LOGIN=True`) any email/password combination logs you in as a demo user, or sign in with your `OWNER_LOGIN` / `OWNER_PASSWORD` for the owner dashboard.
+
+---
+
+## Security Notes
+
+- Order success pages are protected: authenticated users can only view their own orders, while guest checkout success is limited to recent order ids stored in that browser session.
+- Owner access uses a separate session flag, ignores empty owner passwords, and temporarily locks the owner login after repeated failed attempts.
+- Demo login is controlled by `ENABLE_DEMO_LOGIN` and only runs when `DJANGO_DEBUG=True`; disable it for any shared staging or production deployment.
+- Production security settings are configured through environment variables: `ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS`, `SESSION_COOKIE_SECURE`, `CSRF_COOKIE_SECURE`, `SECURE_SSL_REDIRECT`, and HSTS options.
+
+## Quality
+
+- GitHub Actions CI runs Django system checks and the test suite on pushes to `main`, `master`, `develop`, and on pull requests.
+- Checkout tests cover order creation, stock updates, unavailable/out-of-stock products, duplicate submit protection, and order success permissions.
+- Booking tests cover appointment creation, user isolation, past-date rejection, specialist/service validation, and double-booking prevention.
 
 ---
 
@@ -211,26 +224,24 @@ erDiagram
 
 ## Pages Screenshots
 
-| Page | Description |
-|------|-------------|
-| `/` | Home — hero + featured products (sign-in required) |
-| `/catalog/` | Brand list |
-| `/catalog/brand/<slug>/` | Brand's products, filterable by category and search |
-| `/catalog/<slug>/` | Product detail — add to cart, wishlist, reviews |
-| `/cart/` | Shopping cart with quantity controls |
-| `/checkout/` | Checkout form |
-| `/orders/` | My orders (auth required) |
-| `/wishlist/` | My wishlist (auth required) |
-| `/booking/services/` | Services list with "Book now" |
-| `/booking/specialists/` | Specialist profiles |
-| `/booking/appointments/book/` | Appointment booking form |
-| `/booking/appointments/` | My appointments (auth required) |
-| `/accounts/login/`, `/accounts/register/` | Login / Register (tabs) |
-| `/accounts/profile/` | User profile |
-| `/owner/` | Owner dashboard — analytics, recent orders & appointments (owner login required) |
-| `/catalog/owner/products/` | Owner product management — list, add, edit, delete |
-
-> _Add screenshots for each page in the PR description_
+| Page | Description | Screenshot |
+|------|-------------|------------|
+| `/` | Home — hero + featured products (sign-in required) | <img src="docs/screenshots/home.png" width="320"> |
+| `/catalog/` | Brand list | <img src="docs/screenshots/catalog-brands.png" width="320"> |
+| `/catalog/brand/<slug>/` | Brand's products, filterable by category and search | <img src="docs/screenshots/catalog-brand-products.png" width="320"> |
+| `/catalog/<slug>/` | Product detail — add to cart, wishlist, reviews | <img src="docs/screenshots/product-detail.png" width="320"> |
+| `/cart/` | Shopping cart with quantity controls | <img src="docs/screenshots/cart.png" width="320"> |
+| `/checkout/` | Checkout form | <img src="docs/screenshots/checkout.png" width="320"> |
+| `/orders/` | My orders (auth required) | <img src="docs/screenshots/orders.png" width="320"> |
+| `/wishlist/` | My wishlist (auth required) | <img src="docs/screenshots/wishlist.png" width="320"> |
+| `/booking/services/` | Services list with "Book now" | <img src="docs/screenshots/booking-services.png" width="320"> |
+| `/booking/specialists/` | Specialist profiles | <img src="docs/screenshots/booking-specialists.png" width="320"> |
+| `/booking/appointments/book/` | Appointment booking form | <img src="docs/screenshots/booking-appointment-form.png" width="320"> |
+| `/booking/appointments/` | My appointments (auth required) | <img src="docs/screenshots/booking-my-appointments.png" width="320"> |
+| `/accounts/login/`, `/accounts/register/` | Login / Register (tabs) | <img src="docs/screenshots/auth-login.png" width="320"> |
+| `/accounts/profile/` | User profile | <img src="docs/screenshots/profile.png" width="320"> |
+| `/owner/` | Owner dashboard — analytics, recent orders & appointments (owner login required) | <img src="docs/screenshots/owner-dashboard.png" width="320"> |
+| `/owner/products/` | Owner product management — list, add, edit, delete | <img src="docs/screenshots/owner-products.png" width="320"> |
 
 ---
 

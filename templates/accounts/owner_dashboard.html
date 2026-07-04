@@ -1,41 +1,41 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}Панель власника | Beauty Store{% endblock %}
+{% block title %}{% trans "Owner dashboard" %} | Beauty Store{% endblock %}
 
 {% block content %}
 <div class="container mt-5 owner-dashboard">
     <div class="page-header">
-        <p class="warm-kicker mb-1">Кабінет власника</p>
-        <h1 class="page-header__title">Панель магазину</h1>
-        <p class="page-header__sub">Замовлення, бронювання, покупки та активність магазину.</p>
+        <p class="warm-kicker mb-1">{% trans "Owner dashboard" %}</p>
+        <h1 class="page-header__title">{% trans "Store panel" %}</h1>
+        <p class="page-header__sub">{% trans "Orders, bookings, purchases and store activity." %}</p>
     </div>
 
     <div class="row g-3 mb-4">
         <div class="col-sm-6 col-xl-3">
             <div class="warm-panel owner-stat">
-                <div class="owner-stat__label">Виручка</div>
-                <div class="owner-stat__value">{{ total_revenue|floatformat:2 }} грн</div>
+                <div class="owner-stat__label">{% trans "Revenue" %}</div>
+                <div class="owner-stat__value">{% blocktrans with amount=total_revenue|floatformat:2 %}{{ amount }} UAH{% endblocktrans %}</div>
             </div>
         </div>
         <div class="col-sm-6 col-xl-3">
             <div class="warm-panel owner-stat">
-                <div class="owner-stat__label">Замовлення</div>
+                <div class="owner-stat__label">{% trans "Orders" %}</div>
                 <div class="owner-stat__value">{{ total_orders }}</div>
             </div>
         </div>
         <div class="col-sm-6 col-xl-3">
             <div class="warm-panel owner-stat">
-                <div class="owner-stat__label">Бронювання</div>
+                <div class="owner-stat__label">{% trans "Bookings" %}</div>
                 <div class="owner-stat__value">{{ total_appointments }}</div>
-                <div class="owner-stat__hint">{{ pending_appointments }} в очікуванні</div>
+                <div class="owner-stat__hint">{% blocktrans count counter=pending_appointments %}{{ counter }} pending{% plural %}{{ counter }} pending{% endblocktrans %}</div>
             </div>
         </div>
         <div class="col-sm-6 col-xl-3">
             <div class="warm-panel owner-stat">
-                <div class="owner-stat__label">Продано товарів</div>
+                <div class="owner-stat__label">{% trans "Items sold" %}</div>
                 <div class="owner-stat__value">{{ items_sold }}</div>
-                <div class="owner-stat__hint">{{ total_products }} товарів</div>
+                <div class="owner-stat__hint">{% blocktrans count counter=total_products %}{{ counter }} product{% plural %}{{ counter }} products{% endblocktrans %}</div>
             </div>
         </div>
     </div>
@@ -44,32 +44,30 @@
         <div class="col-xl-7">
             <div class="warm-panel owner-section">
                 <div class="owner-section__head">
-                    <h2>Останні замовлення</h2>
-                    <span>{{ total_orders }} всього</span>
+                    <h2>{% trans "Recent orders" %}</h2>
+                    <span>{% blocktrans count counter=total_orders %}{{ counter }} total{% plural %}{{ counter }} total{% endblocktrans %}</span>
                 </div>
 
                 {% for order in orders %}
                     <div class="owner-row">
                         <div>
-                            <div class="owner-row__title">Замовлення #{{ order.pk }} - {{ order.first_name }} {{ order.last_name }}</div>
+                            <div class="owner-row__title">{% blocktrans with pk=order.pk first_name=order.first_name last_name=order.last_name %}Order #{{ pk }} - {{ first_name }} {{ last_name }}{% endblocktrans %}</div>
                             <div class="owner-row__meta">{{ order.email }} · {{ order.phone }} · {{ order.created_at|date:"M j, Y H:i" }}</div>
                             <div class="owner-row__items">
                                 {% for item in order.items.all %}
                                     <span>{{ item.name }} x{{ item.quantity }}</span>
                                 {% empty %}
-                                    <span>Немає товарів</span>
+                                    <span>{% trans "No items" %}</span>
                                 {% endfor %}
                             </div>
                         </div>
                         <div class="owner-row__side">
-                            <strong>{{ order.total_price|floatformat:2 }} грн</strong>
-                            <small>
-                                {% if order.status == "pending" %}Очікує{% elif order.status == "processing" %}В обробці{% elif order.status == "shipped" %}Відправлено{% elif order.status == "delivered" %}Доставлено{% elif order.status == "cancelled" %}Скасовано{% else %}{{ order.get_status_display }}{% endif %}
-                            </small>
+                            <strong>{% blocktrans with amount=order.total_price|floatformat:2 %}{{ amount }} UAH{% endblocktrans %}</strong>
+                            <small>{{ order.get_status_display }}</small>
                         </div>
                     </div>
                 {% empty %}
-                    <p class="text-muted-custom mb-0">Замовлень поки немає.</p>
+                    <p class="text-muted-custom mb-0">{% trans "No orders yet." %}</p>
                 {% endfor %}
             </div>
         </div>
@@ -77,8 +75,8 @@
         <div class="col-xl-5">
             <div class="warm-panel owner-section">
                 <div class="owner-section__head">
-                    <h2>Бронювання</h2>
-                    <span>{{ total_appointments }} всього</span>
+                    <h2>{% trans "Bookings" %}</h2>
+                    <span>{% blocktrans count counter=total_appointments %}{{ counter }} total{% plural %}{{ counter }} total{% endblocktrans %}</span>
                 </div>
 
                 {% for appointment in appointments %}
@@ -88,45 +86,44 @@
                             <div class="owner-row__meta">
                                 {{ appointment.user.email }} · {{ appointment.specialist.name }}
                             </div>
-                            <div class="owner-row__meta">{{ appointment.date|date:"M j, Y" }} о {{ appointment.time|time:"H:i" }}</div>
+                            <div class="owner-row__meta">{% blocktrans with day=appointment.date|date:"M j, Y" hour=appointment.time|time:"H:i" %}{{ day }} at {{ hour }}{% endblocktrans %}</div>
                         </div>
                         <div class="owner-row__side">
-                            <small>
-                                {% if appointment.status == "pending" %}Очікує{% elif appointment.status == "confirmed" %}Підтверджено{% elif appointment.status == "cancelled" %}Скасовано{% elif appointment.status == "completed" %}Завершено{% else %}{{ appointment.get_status_display }}{% endif %}
-                            </small>
+                            <small>{{ appointment.get_status_display }}</small>
                         </div>
                     </div>
                 {% empty %}
-                    <p class="text-muted-custom mb-0">Бронювань поки немає.</p>
+                    <p class="text-muted-custom mb-0">{% trans "No bookings yet." %}</p>
                 {% endfor %}
             </div>
 
             <div class="warm-panel owner-section mt-4">
                 <div class="owner-section__head">
-                    <h2>Популярні покупки</h2>
-                    <span>за кількістю</span>
+                    <h2>{% trans "Top-selling items" %}</h2>
+                    <span>{% trans "by quantity" %}</span>
                 </div>
 
                 {% for item in top_items %}
                     <div class="owner-row owner-row--compact">
                         <div>
                             <div class="owner-row__title">{{ item.name }}</div>
-                            <div class="owner-row__meta">{{ item.orders }} замовлень</div>
+                            <div class="owner-row__meta">{% blocktrans count counter=item.orders %}{{ counter }} order{% plural %}{{ counter }} orders{% endblocktrans %}</div>
                         </div>
                         <div class="owner-row__side">
                             <strong>{{ item.quantity }}</strong>
-                            <small>продано</small>
+                            <small>{% trans "sold" %}</small>
                         </div>
                     </div>
                 {% empty %}
-                    <p class="text-muted-custom mb-0">Покупок поки немає.</p>
+                    <p class="text-muted-custom mb-0">{% trans "No purchases yet." %}</p>
                 {% endfor %}
             </div>
         </div>
     </div>
 
-    <div class="mt-4">
-        <a href="{% url 'owner-logout' %}" class="btn-outline-custom">Вийти з кабінету власника</a>
+    <div class="mt-4 d-flex gap-3">
+        <a href="{% url 'owner-products' %}" class="btn-primary-custom">{% trans "Manage products" %}</a>
+        <a href="{% url 'owner-logout' %}" class="btn-outline-custom">{% trans "Log out of owner dashboard" %}</a>
     </div>
 </div>
 {% endblock %}

@@ -28,11 +28,18 @@ SECRET_KEY = config("DJANGO_SECRET_KEY")
 DEBUG = config("DJANGO_DEBUG", default=True, cast=bool)
 
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="127.0.0.1,localhost", cast=Csv())
+CSRF_TRUSTED_ORIGINS = [
+    origin
+    for origin in config("CSRF_TRUSTED_ORIGINS", default="", cast=Csv())
+    if origin
+]
+ENABLE_DEMO_LOGIN = config("ENABLE_DEMO_LOGIN", default=DEBUG, cast=bool)
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -123,6 +130,14 @@ LANGUAGES = [
 
 LOCALE_PATHS = [BASE_DIR / 'locale']
 
+# django-modeltranslation: bilingual content fields on catalog/booking models
+# (e.g. specialist bios, service and product descriptions) that live in the
+# database rather than in template strings, so gettext can't translate them.
+MODELTRANSLATION_LANGUAGES = ('en', 'uk')
+# Real seed content (specialist bios, service copy, product/brand descriptions)
+# was entered in Ukrainian first, so it's the source-of-truth fallback language.
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'uk'
+
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -144,6 +159,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+AUTH_USER_MODEL = "accounts.User"
+
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "home"
 
@@ -151,10 +168,23 @@ AUTHENTICATION_BACKENDS = [
     "accounts.backends.EmailBackend",
 ]
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = config("EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend")
 EMAIL_HOST = config("EMAIL_HOST", default="sandbox.smtp.mailtrap.io")
 EMAIL_PORT = config("EMAIL_PORT", default=2525, cast=int)
 EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
 EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="Beauty Store <noreply@beautystore.com>")
+
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = config("SESSION_COOKIE_SAMESITE", default="Lax")
+SESSION_COOKIE_SECURE = config("SESSION_COOKIE_SECURE", default=not DEBUG, cast=bool)
+CSRF_COOKIE_SECURE = config("CSRF_COOKIE_SECURE", default=not DEBUG, cast=bool)
+SECURE_SSL_REDIRECT = config("SECURE_SSL_REDIRECT", default=not DEBUG, cast=bool)
+SECURE_HSTS_SECONDS = config("SECURE_HSTS_SECONDS", default=0 if DEBUG else 31536000, cast=int)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = config(
+    "SECURE_HSTS_INCLUDE_SUBDOMAINS",
+    default=not DEBUG,
+    cast=bool,
+)
+SECURE_HSTS_PRELOAD = config("SECURE_HSTS_PRELOAD", default=False, cast=bool)

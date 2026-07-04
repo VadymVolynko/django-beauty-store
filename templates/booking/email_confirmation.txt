@@ -1,15 +1,15 @@
-Hello {{ appointment.user.first_name|default:appointment.user.username }},
+{% load i18n %}{% blocktrans with first_name=appointment.user.first_name|default:appointment.user.username %}Hello {{ first_name }},{% endblocktrans %}
 
-Your appointment has been booked!
+{% trans "Your appointment has been booked!" %}
 
-Service:    {{ appointment.service.name }}
-Specialist: {{ appointment.specialist.name }}
-Date:       {{ appointment.date|date:"F j, Y" }}
-Time:       {{ appointment.time|time:"H:i" }}
-Duration:   {{ appointment.service.duration }} min
+{% trans "Service:" %}    {{ appointment.service.name }}
+{% trans "Specialist:" %} {{ appointment.specialist.name }}
+{% trans "Date:" %}       {{ appointment.date|date:"F j, Y" }}
+{% trans "Time:" %}       {{ appointment.time|time:"H:i" }}
+{% trans "Duration:" %}   {{ appointment.service.duration }} {% trans "min" %}
 
-{% if appointment.comment %}Your note: {{ appointment.comment }}{% endif %}
+{% if appointment.comment %}{% blocktrans with note=appointment.comment %}Your note: {{ note }}{% endblocktrans %}{% endif %}
 
-You can view or cancel your appointment in your profile.
+{% trans "You can view or cancel your appointment in your profile." %}
 
 — Beauty Store

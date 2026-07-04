@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Catalog" %} | Beauty Store{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-header__title">{% trans "Shop by Brand" %}</h1>
+        <p class="page-header__sub">{{ page_obj.paginator.count }} {% trans "brands" %}</p>
+    </div>
+
+    <div class="row g-4">
+        {% for brand in brands %}
+            <div class="col-sm-6 col-lg-4">
+                <a href="{% url 'catalog-brand' brand.slug %}" class="product-card" style="display:block; text-decoration:none; color:inherit;">
+                    <div class="product-card__img-wrap">
+                        {% if brand.image %}
+                            <img src="{{ brand.image.url }}" alt="{{ brand.name }}">
+                        {% else %}
+                            <div class="product-card__placeholder">{{ brand.name }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="product-card__body">
+                        <div class="product-card__name">{{ brand.name }}</div>
+                        {% if brand.description %}
+                            <div class="product-card__desc">{{ brand.description|truncatewords:16 }}</div>
+                        {% endif %}
+                        <div class="product-card__footer">
+                            <span class="text-accent fw-semibold" style="font-size:.85rem;">{% trans "View products" %} →</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted-custom mb-0">{% trans "No brands yet." %}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% include "includes/pagination.html" with page_obj=page_obj %}
+</div>
+{% endblock %}

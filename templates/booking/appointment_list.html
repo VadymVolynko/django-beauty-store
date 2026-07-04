@@ -59,6 +59,8 @@
                 </div>
             {% endfor %}
         </div>
+
+        {% include "includes/pagination.html" with page_obj=page_obj %}
     {% else %}
         <div class="text-center py-5">
             <p class="text-muted-custom mb-3">{% trans "You have no appointments yet." %}</p>

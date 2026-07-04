@@ -29,17 +29,14 @@ msgstr "Кошик"
 msgid "Wishlist"
 msgstr "Обране"
 
-msgid "My Bookings"
-msgstr "Мої записи"
-
 msgid "Login"
 msgstr "Увійти"
 
 msgid "Logout"
 msgstr "Вийти"
 
-msgid "Language"
-msgstr "Мова"
+msgid "Owner"
+msgstr "Власник"
 
 msgid "Profile"
 msgstr "Профіль"
@@ -76,23 +73,11 @@ msgstr "Всі права захищені."
 msgid "New collection 2026"
 msgstr "Нова колекція 2026"
 
-msgid "Your Daily Beauty Ritual"
-msgstr "Ваш щоденний ритуал краси"
-
-msgid "Premium cosmetics and skincare for every skin type. Discover what works for you."
-msgstr "Преміальна косметика та догляд за шкірою для будь-якого типу шкіри. Знайдіть те, що підходить саме вам."
-
 msgid "Shop now"
 msgstr "В магазин"
 
 msgid "Popular Products"
 msgstr "Популярні товари"
-
-msgid "Handpicked favourites from our catalog"
-msgstr "Вибрані улюбленці з нашого каталогу"
-
-msgid "View all →"
-msgstr "Дивитись все →"
 
 msgid "No image"
 msgstr "Немає фото"
@@ -103,32 +88,18 @@ msgstr "Товарів ще немає."
 msgid "View"
 msgstr "Переглянути"
 
-msgid "Natural Ingredients"
-msgstr "Натуральні інгредієнти"
-
-msgid "Clean beauty you can trust"
-msgstr "Чиста краса, якій можна довіряти"
-
-msgid "Free Shipping"
-msgstr "Безкоштовна доставка"
-
-msgid "On orders over $50"
-msgstr "При замовленні від $50"
-
-msgid "Easy Returns"
-msgstr "Легке повернення"
-
-msgid "30-day hassle-free returns"
-msgstr "30-денне повернення без клопоту"
-
 msgid "Professional Care"
 msgstr "Професійний догляд"
 
 msgid "Book a Cosmetology Session"
 msgstr "Запишіться на косметологічну сесію"
 
-msgid "Our certified specialists are ready to help you look and feel your best. Choose a service, pick a time — and leave the rest to us."
-msgstr "Наші сертифіковані спеціалісти готові допомогти вам виглядати та почуватись найкраще. Оберіть послугу, виберіть час — решту залиште нам."
+msgid ""
+"Our certified specialists are ready to help you look and feel your best. "
+"Choose a service, pick a time, and leave the rest to us."
+msgstr ""
+"Наші сертифіковані спеціалісти готові допомогти вам виглядати та почуватись "
+"найкраще. Оберіть послугу, виберіть час — решту залиште нам."
 
 msgid "Explore services"
 msgstr "Переглянути послуги"
@@ -136,7 +107,62 @@ msgstr "Переглянути послуги"
 msgid "Meet specialists"
 msgstr "Наші спеціалісти"
 
+msgid "Warm care for your daily beauty ritual"
+msgstr "Теплий догляд для щоденного ритуалу краси"
+
+msgid ""
+"Gentle care, soft textures, and professional beauty services for everyday "
+"confidence."
+msgstr ""
+"Делікатний догляд, м'які текстури та професійні beauty-послуги для "
+"впевненості щодня."
+
+msgid "Handpicked essentials for your daily routine"
+msgstr "Обрані засоби для щоденного догляду"
+
+msgid "View all"
+msgstr "Переглянути всі"
+
+msgid "Gentle Formulas"
+msgstr "Делікатні формули"
+
+msgid "Cosmetics and skincare picked for your skin's comfort."
+msgstr "Косметика та доглядові засоби, підібрані для комфорту шкіри."
+
+msgid "Easy Ordering"
+msgstr "Зручне замовлення"
+
+msgid "Simple checkout and a clear path from cart to delivery."
+msgstr "Просте оформлення покупки та зрозумілий шлях до кошика."
+
+msgid "Caring Support"
+msgstr "Турботлива підтримка"
+
+msgid "Help with questions, orders, and service bookings."
+msgstr "Допомога з питаннями, замовленнями та записами на послуги."
+
+msgid "This week"
+msgstr "Цього тижня"
+
+msgid "Skincare Consultation"
+msgstr "Консультація з догляду"
+
+msgid "A relaxed session to match skincare to your skin and lifestyle."
+msgstr "Спокійна зустріч, щоб підібрати догляд під вашу шкіру та ритм життя."
+
 # Catalog
+msgid "Shop by Brand"
+msgstr "Магазин за брендами"
+
+msgid "brands"
+msgstr "брендів"
+
+msgid "View products"
+msgstr "Переглянути товари"
+
+msgid "No brands yet."
+msgstr "Брендів ще немає."
+
 msgid "products found"
 msgstr "товарів знайдено"
 
@@ -174,17 +200,11 @@ msgstr "Назад до каталогу"
 msgid "Out of stock"
 msgstr "Немає в наявності"
 
-msgid "In stock — %(stock)s available"
-msgstr "В наявності — %(stock)s шт."
-
 msgid "Add to cart"
 msgstr "В кошик"
 
 msgid "Add to wishlist"
 msgstr "В обране"
-
-msgid "Reviews (%(count)s)"
-msgstr "Відгуки (%(count)s)"
 
 msgid "Leave a review"
 msgstr "Залишити відгук"
@@ -297,9 +317,6 @@ msgstr "Замовлення підтверджено"
 msgid "Order confirmed!"
 msgstr "Замовлення підтверджено!"
 
-msgid "Thank you, %(name)s. We've received your order and will process it shortly."
-msgstr "Дякуємо, %(name)s! Ми отримали ваше замовлення та обробимо його найближчим часом."
-
 msgid "Order number"
 msgstr "Номер замовлення"
 
@@ -321,9 +338,6 @@ msgstr "Мої замовлення"
 # Order history
 msgid "orders"
 msgstr "замовлень"
-
-msgid "Order #%(pk)s"
-msgstr "Замовлення #%(pk)s"
 
 msgid "No orders yet"
 msgstr "Замовлень ще немає"
@@ -353,9 +367,6 @@ msgstr "Познайомтесь з нашими досвідченими фах
 
 msgid "No photo"
 msgstr "Немає фото"
-
-msgid "%(exp)s years experience"
-msgstr "%(exp)s років досвіду"
 
 msgid "Book appointment"
 msgstr "Записатись"
@@ -461,3 +472,462 @@ msgstr "Мої записи"
 
 msgid "My Wishlist"
 msgstr "Моє обране"
+
+msgid "\"%(name)s\" added to wishlist."
+msgstr "«%(name)s» додано до обраного."
+
+msgid "\"%(name)s\" removed from wishlist."
+msgstr "«%(name)s» видалено з обраного."
+
+msgid "%(name)s has only %(stock)s item(s) left in stock."
+msgstr "Товару «%(name)s» залишилось лише %(stock)s шт. на складі."
+
+msgid "%(name)s is currently unavailable."
+msgstr "Товар «%(name)s» зараз недоступний."
+
+msgid "A product in your cart is no longer available."
+msgstr "Один із товарів у кошику більше недоступний."
+
+msgid "Add product"
+msgstr "Додати товар"
+
+msgid "An account with this email already exists."
+msgstr "Обліковий запис із цією поштою вже існує."
+
+msgid "Any additional notes..."
+msgstr "Додаткові побажання..."
+
+msgid "Appointment confirmed - %(service)s"
+msgstr "Запис підтверджено - %(service)s"
+
+msgid ""
+"Are you sure you want to delete <strong>{{ name }}</strong>? This action "
+"cannot be undone."
+msgstr ""
+"Ви впевнені, що хочете видалити <strong>{{ name }}</strong>? Цю дію не можна"
+" скасувати."
+
+msgid "Auth navigation"
+msgstr "Навігація автентифікації"
+
+msgid "Available"
+msgstr "Доступний"
+
+msgid "Back to login"
+msgstr "Повернутися до входу"
+
+msgid "Back to sign in"
+msgstr "Повернутися до входу"
+
+msgid "Bookings"
+msgstr "Бронювання"
+
+msgid "Cancelled"
+msgstr "Скасовано"
+
+msgid "Check your email"
+msgstr "Перевірте пошту"
+
+msgid "Completed"
+msgstr "Завершено"
+
+msgid "Confirm password"
+msgstr "Підтвердіть пароль"
+
+msgid "Confirmed"
+msgstr "Підтверджено"
+
+msgid "Create Account"
+msgstr "Створити акаунт"
+
+msgid "Create account"
+msgstr "Створити акаунт"
+
+msgid "Create your account"
+msgstr "Створіть свій акаунт"
+
+msgid "Date:"
+msgstr "Дата:"
+
+msgid "Delete"
+msgstr "Видалити"
+
+msgid "Delete product"
+msgstr "Видалити товар"
+
+msgid "Delete product?"
+msgstr "Видалити товар?"
+
+msgid "Delivered"
+msgstr "Доставлено"
+
+msgid "Demo login active. Welcome to the portfolio preview."
+msgstr ""
+"Демо-вхід активний. Ласкаво просимо до попереднього перегляду портфоліо."
+
+msgid "Description"
+msgstr "Опис"
+
+msgid ""
+"Didn't receive it? Check your spam folder.<br>\n"
+"            The link expires in 24 hours."
+msgstr ""
+"Не отримали листа? Перевірте папку «Спам».<br>\n"
+"            Посилання дійсне протягом 24 годин."
+
+msgid "Duration:"
+msgstr "Тривалість:"
+
+msgid "Edit product"
+msgstr "Редагувати товар"
+
+msgid "Email address"
+msgstr "Електронна адреса"
+
+msgid "Enter"
+msgstr "Увійти"
+
+msgid "Enter the owner credentials to view orders, bookings and purchases."
+msgstr ""
+"Введіть дані власника, щоб переглянути замовлення, бронювання та покупки."
+
+msgid "Featured"
+msgstr "Популярний"
+
+msgid "Featured on homepage"
+msgstr "Популярний на головній"
+
+msgid "Forgot password?"
+msgstr "Забули пароль?"
+
+msgid "Hello {{ first_name }},"
+msgstr "Вітаємо, {{ first_name }},"
+
+msgid "Hello,"
+msgstr "Вітаємо,"
+
+msgid "If you did not create an account, you can ignore this email."
+msgstr "Якщо ви не створювали акаунт, просто проігноруйте цей лист."
+
+msgid "Image"
+msgstr "Зображення"
+
+msgid "In stock"
+msgstr "У наявності"
+
+msgid "In stock - {{ stock }} available"
+msgstr "У наявності — {{ stock }} шт."
+
+msgid "Invalid email or password."
+msgstr "Неправильна пошта або пароль."
+
+msgid "Invalid owner credentials."
+msgstr "Неправильні дані власника."
+
+msgid "Items sold"
+msgstr "Продано товарів"
+
+msgid "Items:"
+msgstr "Товари:"
+
+msgid "Join us"
+msgstr "Приєднуйтесь"
+
+msgid "Log out of owner dashboard"
+msgstr "Вийти з кабінету власника"
+
+msgid "Main navigation"
+msgstr "Основна навігація"
+
+msgid "Manage products"
+msgstr "Керувати товарами"
+
+msgid "Name"
+msgstr "Назва"
+
+msgid "New"
+msgstr "Новий"
+
+msgid "New product"
+msgstr "Новий товар"
+
+msgid "Next"
+msgstr "Далі"
+
+msgid "No bookings yet."
+msgstr "Бронювань поки немає."
+
+msgid "No items"
+msgstr "Немає товарів"
+
+msgid "No orders yet."
+msgstr "Замовлень поки немає."
+
+msgid "No purchases yet."
+msgstr "Покупок поки немає."
+
+msgid "Open panel"
+msgstr "Відкрити панель"
+
+msgid "Order #%(number)s confirmed - Beauty Store"
+msgstr "Замовлення #%(number)s підтверджено - Beauty Store"
+
+msgid "Order #{{ pk }}"
+msgstr "Замовлення #{{ pk }}"
+
+msgid "Order #{{ pk }} - {{ first_name }} {{ last_name }}"
+msgstr "Замовлення #{{ pk }} - {{ first_name }} {{ last_name }}"
+
+msgid "Orders"
+msgstr "Замовлення"
+
+msgid "Orders, bookings, purchases and store activity."
+msgstr "Замовлення, бронювання, покупки та активність магазину."
+
+msgid "Owner access closed."
+msgstr "Доступ власника закрито."
+
+msgid "Owner access enabled."
+msgstr "Доступ власника увімкнено."
+
+msgid "Owner dashboard"
+msgstr "Кабінет власника"
+
+msgid "Owner login"
+msgstr "Вхід власника"
+
+msgid "Page {{ current }} of {{ total }}"
+msgstr "Сторінка {{ current }} з {{ total }}"
+
+msgid "Pagination"
+msgstr "Пагінація"
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Passwords do not match."
+msgstr "Паролі не збігаються."
+
+msgid "Pending"
+msgstr "Очікує"
+
+msgid "Phone number"
+msgstr "Номер телефону"
+
+msgid "Please confirm your email address by clicking the link below:"
+msgstr "Підтвердіть свою електронну адресу, натиснувши посилання нижче:"
+
+msgid "Please verify your email first. Check your inbox."
+msgstr "Спочатку підтвердіть свою пошту. Перевірте вхідні."
+
+msgid "Prev"
+msgstr "Назад"
+
+msgid "Price"
+msgstr "Ціна"
+
+msgid "Private panel"
+msgstr "Приватна панель"
+
+msgid "Processing"
+msgstr "В обробці"
+
+msgid "Products"
+msgstr "Товари"
+
+msgid "Recent orders"
+msgstr "Останні замовлення"
+
+msgid "Remove from wishlist"
+msgstr "Видалити з обраного"
+
+msgid "Revenue"
+msgstr "Виручка"
+
+msgid "Reviews ({{ count }})"
+msgstr "Відгуки ({{ count }})"
+
+msgid "Save"
+msgstr "Зберегти"
+
+msgid "Service:"
+msgstr "Послуга:"
+
+msgid "Share your experience..."
+msgstr "Поділіться своїм враженням..."
+
+msgid "Ship to: {{ address }}, {{ city }}, {{ postal_code }}"
+msgstr "Доставка: {{ address }}, {{ city }}, {{ postal_code }}"
+
+msgid "Shipped"
+msgstr "Відправлено"
+
+msgid "Sign in to your account"
+msgstr "Увійдіть у свій акаунт"
+
+msgid "Slug"
+msgstr "Слаг"
+
+msgid "Specialist:"
+msgstr "Спеціаліст:"
+
+msgid "Stock"
+msgstr "Залишок"
+
+msgid "Store panel"
+msgstr "Панель магазину"
+
+msgid "Test logout"
+msgstr "Тестовий вихід"
+
+msgid "Thank you for registering at Beauty Store."
+msgstr "Дякуємо за реєстрацію в Beauty Store."
+
+msgid "Thank you for your order! Here are the details:"
+msgstr "Дякуємо за ваше замовлення! Ось деталі:"
+
+msgid ""
+"Thank you, {{ name }}. We've received your order and will process it "
+"shortly."
+msgstr ""
+"Дякуємо, {{ name }}! Ми отримали ваше замовлення та обробимо його найближчим"
+" часом."
+
+msgid ""
+"This checkout session has expired. Please review your cart and try again."
+msgstr ""
+"Термін дії сесії оформлення замовлення минув. Перевірте кошик і спробуйте ще"
+" раз."
+
+msgid "This link is valid for 24 hours."
+msgstr "Це посилання дійсне протягом 24 годин."
+
+msgid "Time:"
+msgstr "Час:"
+
+msgid "Too many owner login attempts. Please try again later."
+msgstr "Забагато спроб входу власника. Спробуйте пізніше."
+
+msgid "Top-selling items"
+msgstr "Популярні покупки"
+
+msgid "Total: {{ amount }} UAH"
+msgstr "Разом: {{ amount }} грн"
+
+msgid "Unavailable"
+msgstr "Недоступний"
+
+msgid "Verification link has expired. Please register again."
+msgstr "Термін дії посилання для підтвердження минув. Зареєструйтесь знову."
+
+msgid "Verify your Beauty Store account"
+msgstr "Підтвердіть свій акаунт Beauty Store"
+
+msgid "We will process your order shortly."
+msgstr "Ми обробимо ваше замовлення найближчим часом."
+
+msgid ""
+"We've sent a verification link to your email.<br>\n"
+"            Click it to activate your account."
+msgstr ""
+"Ми надіслали посилання для підтвердження на вашу пошту.<br>\n"
+"            Перейдіть за ним, щоб активувати акаунт."
+
+msgid "Welcome"
+msgstr "Ласкаво просимо"
+
+msgid "Welcome back, %(name)s!"
+msgstr "З поверненням, %(name)s!"
+
+msgid "Welcome to Beauty Store, %(name)s!"
+msgstr "Ласкаво просимо до Beauty Store, %(name)s!"
+
+msgid "Wrong owner login or password."
+msgstr "Неправильний логін або пароль власника."
+
+msgid "You can view or cancel your appointment in your profile."
+msgstr "Ви можете переглянути або скасувати запис у своєму профілі."
+
+msgid "Your appointment has been booked!"
+msgstr "Ваш запис створено!"
+
+msgid "Your beauty orders and appointments in one place."
+msgstr "Ваші замовлення та записи на процедури в одному місці."
+
+msgid "Your note: {{ note }}"
+msgstr "Ваш коментар: {{ note }}"
+
+msgid "by quantity"
+msgstr "за кількістю"
+
+msgid "or"
+msgstr "або"
+
+msgid "product"
+msgstr "товар"
+
+msgid "sold"
+msgstr "продано"
+
+msgid "{{ amount }} UAH"
+msgstr "{{ amount }} грн"
+
+msgid "{{ day }} at {{ hour }}"
+msgstr "{{ day }} о {{ hour }}"
+
+msgid "{{ exp }} years experience"
+msgstr "{{ exp }} років досвіду"
+
+msgid "{{ stock }} left"
+msgstr "залишок {{ stock }}"
+
+msgid "Choose today or a future date."
+msgstr "Оберіть сьогоднішню або майбутню дату."
+
+msgid "This specialist does not offer the selected service."
+msgstr "Цей спеціаліст не надає обрану послугу."
+
+msgid "This specialist is already booked for that time."
+msgstr "Цей спеціаліст вже заброньований на цей час."
+
+msgid "{{ counter }} order"
+msgid_plural "{{ counter }} orders"
+msgstr[0] "{{ counter }} замовлення"
+msgstr[1] "{{ counter }} замовлення"
+msgstr[2] "{{ counter }} замовлень"
+
+msgid "{{ counter }} pending"
+msgid_plural "{{ counter }} pending"
+msgstr[0] "{{ counter }} в очікуванні"
+msgstr[1] "{{ counter }} в очікуванні"
+msgstr[2] "{{ counter }} в очікуванні"
+
+msgid "{{ counter }} product in the catalog."
+msgid_plural "{{ counter }} products in the catalog."
+msgstr[0] "{{ counter }} товар у каталозі."
+msgstr[1] "{{ counter }} товари у каталозі."
+msgstr[2] "{{ counter }} товарів у каталозі."
+
+msgid "{{ counter }} product"
+msgid_plural "{{ counter }} products"
+msgstr[0] "{{ counter }} товар"
+msgstr[1] "{{ counter }} товари"
+msgstr[2] "{{ counter }} товарів"
+
+msgid "{{ counter }} total"
+msgid_plural "{{ counter }} total"
+msgstr[0] "{{ counter }} всього"
+msgstr[1] "{{ counter }} всього"
+msgstr[2] "{{ counter }} всього"
+
+msgid "Close"
+msgstr "Закрити"
+
+msgid "Switch theme"
+msgstr "Змінити тему"
+
+msgid "Toggle theme"
+msgstr "Перемкнути тему"
+
+msgid "Your review has been posted."
+msgstr "Ваш відгук опубліковано."

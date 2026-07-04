@@ -12,6 +12,8 @@ class Category(models.Model):
 class Brand(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
+    description = models.TextField(blank=True)
+    image = models.ImageField(upload_to="brands/", blank=True, null=True)
 
     def __str__(self) -> str:
         return self.name
@@ -46,6 +48,7 @@ class Product(models.Model):
 
     stock = models.PositiveIntegerField(default=0)
     is_available = models.BooleanField(default=True)
+    is_featured = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(
         auto_now_add=True,

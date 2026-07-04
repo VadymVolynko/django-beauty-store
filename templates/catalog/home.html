@@ -8,10 +8,10 @@
 <section class="hero">
     <div class="container">
         <p class="warm-kicker mb-2">{% trans "New collection 2026" %}</p>
-        <h1 class="hero__title">Теплий догляд для щоденного ритуалу краси</h1>
+        <h1 class="hero__title">{% trans "Warm care for your daily beauty ritual" %}</h1>
         <hr class="hero__divider">
         <p class="hero__subtitle">
-            Делікатний догляд, м'які текстури та професійні beauty-послуги для впевненості щодня.
+            {% trans "Gentle care, soft textures, and professional beauty services for everyday confidence." %}
         </p>
         <a href="{% url 'catalog' %}" class="btn-primary-custom">{% trans "Shop now" %}</a>
     </div>
@@ -21,9 +21,9 @@
     <div class="d-flex align-items-end justify-content-between mb-4 flex-wrap gap-3">
         <div>
             <h2 class="section-title mb-1">{% trans "Popular Products" %}</h2>
-            <p class="section-subtitle mb-0">Обрані засоби для щоденного догляду</p>
+            <p class="section-subtitle mb-0">{% trans "Handpicked essentials for your daily routine" %}</p>
         </div>
-        <a href="{% url 'catalog' %}" class="text-accent fw-semibold" style="font-size:.9rem;">Переглянути всі</a>
+        <a href="{% url 'catalog' %}" class="text-accent fw-semibold" style="font-size:.9rem;">{% trans "View all" %}</a>
     </div>
 
     <div class="row g-4">
@@ -42,7 +42,7 @@
                         <div class="product-card__name">{{ product.name }}</div>
                         <div class="product-card__desc">{{ product.description|truncatewords:14 }}</div>
                         <div class="product-card__footer">
-                            <span class="product-card__price">{{ product.price }} грн</span>
+                            <span class="product-card__price">{% blocktrans with amount=product.price %}{{ amount }} UAH{% endblocktrans %}</span>
                             <a href="{% url 'product' product.slug %}" class="btn-primary-custom" style="padding:.5rem 1.1rem; font-size:.85rem;">{% trans "View" %}</a>
                         </div>
                     </div>
@@ -59,22 +59,22 @@
         <div class="col-md-4">
             <div class="warm-panel warm-feature">
                 <div class="warm-feature__mark">1</div>
-                <div class="warm-feature__title">Делікатні формули</div>
-                <p class="warm-feature__text">Косметика та доглядові засоби, підібрані для комфорту шкіри.</p>
+                <div class="warm-feature__title">{% trans "Gentle Formulas" %}</div>
+                <p class="warm-feature__text">{% trans "Cosmetics and skincare picked for your skin's comfort." %}</p>
             </div>
         </div>
         <div class="col-md-4">
             <div class="warm-panel warm-feature">
                 <div class="warm-feature__mark">2</div>
-                <div class="warm-feature__title">Зручне замовлення</div>
-                <p class="warm-feature__text">Просте оформлення покупки та зрозумілий шлях до кошика.</p>
+                <div class="warm-feature__title">{% trans "Easy Ordering" %}</div>
+                <p class="warm-feature__text">{% trans "Simple checkout and a clear path from cart to delivery." %}</p>
             </div>
         </div>
         <div class="col-md-4">
             <div class="warm-panel warm-feature">
                 <div class="warm-feature__mark">3</div>
-                <div class="warm-feature__title">Турботлива підтримка</div>
-                <p class="warm-feature__text">Допомога з питаннями, замовленнями та записами на послуги.</p>
+                <div class="warm-feature__title">{% trans "Caring Support" %}</div>
+                <p class="warm-feature__text">{% trans "Help with questions, orders, and service bookings." %}</p>
             </div>
         </div>
     </div>
@@ -95,9 +95,9 @@
         </div>
         <div class="col-md-5">
             <div class="warm-panel" style="background:var(--color-soft); padding:2rem;">
-                <div class="warm-kicker mb-2">Цього тижня</div>
-                <h3 class="mb-2" style="font-family:var(--font-serif);">Консультація з догляду</h3>
-                <p class="mb-0" style="color:var(--color-muted);">Спокійна зустріч, щоб підібрати догляд під вашу шкіру та ритм життя.</p>
+                <div class="warm-kicker mb-2">{% trans "This week" %}</div>
+                <h3 class="mb-2" style="font-family:var(--font-serif);">{% trans "Skincare Consultation" %}</h3>
+                <p class="mb-0" style="color:var(--color-muted);">{% trans "A relaxed session to match skincare to your skin and lifestyle." %}</p>
             </div>
         </div>
     </div>

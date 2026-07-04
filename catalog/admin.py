@@ -1,4 +1,5 @@
 from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin
 
 from catalog.models import Brand, Category, Product
 
@@ -10,13 +11,13 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(Brand)
-class BrandAdmin(admin.ModelAdmin):
-    list_display = ("name", "slug")
+class BrandAdmin(TranslationAdmin):
+    list_display = ("name", "slug", "image")
     prepopulated_fields = {"slug": ("name",)}
 
 
 @admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(TranslationAdmin):
     list_display = (
         "name",
         "category",
@@ -24,12 +25,14 @@ class ProductAdmin(admin.ModelAdmin):
         "price",
         "stock",
         "is_available",
+        "is_featured",
     )
 
     list_filter = (
         "category",
         "brand",
         "is_available",
+        "is_featured",
     )
 
     search_fields = (

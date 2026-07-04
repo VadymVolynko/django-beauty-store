@@ -41,6 +41,12 @@
                     <div class="fw-semibold">{{ request.user.date_joined|date:"F j, Y" }}</div>
                 </div>
             </div>
+            <div class="col-sm-4">
+                <div class="warm-panel" style="background:var(--color-soft); padding:1rem;">
+                    <div class="warm-kicker mb-1">{% trans "Phone" %}</div>
+                    <div class="fw-semibold">{{ request.user.phone_number|default:"—" }}</div>
+                </div>
+            </div>
         </div>
     </div>
 
