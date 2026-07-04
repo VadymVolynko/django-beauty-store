@@ -35,7 +35,7 @@ class AccountViewTests(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn("ada@example.com", mail.outbox[0].to)
 
-    @override_settings(DEBUG=True)
+    @override_settings(DEBUG=True, ENABLE_DEMO_LOGIN=True)
     def test_debug_demo_login_creates_active_user(self):
         response = self.client.post(
             reverse("login"),
