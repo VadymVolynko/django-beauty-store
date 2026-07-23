@@ -180,7 +180,7 @@ img { display: block; max-width: 100%; }
 
 /* ── Buttons ── */
 .btn-primary-custom {
-    background: var(--color-primary);
+    background: var(--color-ink);
     color: #fff;
     border: none;
     border-radius: var(--radius-sm);
@@ -690,6 +690,7 @@ img { display: block; max-width: 100%; }
     --color-bg: #fff8f1;
     --color-surface: #fffdf9;
     --color-primary: #3a2720;
+    --color-ink: #3a2720;
     --color-accent: #d88a63;
     --color-accent-light: #f7d7c4;
     --color-muted: #8f7468;
@@ -771,7 +772,7 @@ body {
 }
 
 .btn-primary-custom {
-    background: var(--color-primary);
+    background: var(--color-ink);
     padding: .72rem 1.55rem;
 }
 
