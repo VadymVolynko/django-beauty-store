@@ -84,6 +84,18 @@ Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser. The storefr
 
 ---
 
+## Deployment (Render)
+
+The app is ready to deploy on [Render](https://render.com/docs/deploy-django) either via the included `render.yaml` blueprint (New → Blueprint, point it at this repo — provisions a free web service and a free Postgres database) or manually:
+
+- **Build command:** `./build.sh` (installs dependencies, runs `collectstatic`, runs `migrate`)
+- **Start command:** `gunicorn config.wsgi:application`
+- **Environment variables:** `DJANGO_SECRET_KEY`, `DJANGO_DEBUG=False`, `ENABLE_DEMO_LOGIN=False`, `DATABASE_URL` (from a Render Postgres instance), plus any of the email/owner-login vars from `.env.example` you want in production. `ALLOWED_HOSTS`/`CSRF_TRUSTED_ORIGINS` don't need to be set manually — the app trusts Render's own `RENDER_EXTERNAL_HOSTNAME` automatically.
+
+Note: Render's filesystem is ephemeral, so uploaded media (product/specialist images added after deploy) won't persist across deploys/restarts — attach a persistent disk or move `MEDIA` to object storage (e.g. S3) for real production use.
+
+---
+
 ## Security Notes
 
 - Order success pages are protected: authenticated users can only view their own orders, while guest checkout success is limited to recent order ids stored in that browser session.

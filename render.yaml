@@ -1,0 +1,25 @@
+databases:
+  - name: beauty-store-db
+    databaseName: beauty_store
+    plan: free
+
+services:
+  - type: web
+    name: beauty-store
+    runtime: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn config.wsgi:application"
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: ENABLE_DEMO_LOGIN
+        value: "False"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: beauty-store-db
+          property: connectionString
+      - key: PYTHON_VERSION
+        value: "3.12.7"
