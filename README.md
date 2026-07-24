@@ -88,9 +88,15 @@ Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser. The storefr
 
 The app is ready to deploy on [Render](https://render.com/docs/deploy-django) either via the included `render.yaml` blueprint (New → Blueprint, point it at this repo — provisions a free web service and a free Postgres database) or manually:
 
-- **Build command:** `./build.sh` (installs dependencies, runs `collectstatic`, runs `migrate`)
+- **Build command:** `./build.sh` (installs dependencies, runs `collectstatic`, runs `migrate`, seeds sample catalog/booking data, and creates/resets a standing test user)
 - **Start command:** `gunicorn config.wsgi:application`
 - **Environment variables:** `DJANGO_SECRET_KEY`, `DJANGO_DEBUG=False`, `ENABLE_DEMO_LOGIN=False`, `DATABASE_URL` (from a Render Postgres instance), plus any of the email/owner-login vars from `.env.example` you want in production. `ALLOWED_HOSTS`/`CSRF_TRUSTED_ORIGINS` don't need to be set manually — the app trusts Render's own `RENDER_EXTERNAL_HOSTNAME` automatically.
+
+**Test account for reviewers** (since `ENABLE_DEMO_LOGIN` is off in production, sign in requires a real, verified account — `build.sh` creates one on every deploy so nobody needs email access to check out the site):
+```
+login: user@example.com
+password: user12345
+```
 
 Note: Render's filesystem is ephemeral, so uploaded media (product/specialist images added after deploy) won't persist across deploys/restarts — attach a persistent disk or move `MEDIA` to object storage (e.g. S3) for real production use.
 
