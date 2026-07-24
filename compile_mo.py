@@ -90,10 +90,12 @@ def compile_po(po_path, mo_path):
     ids_start = trans_table_offset + n * 8
     strs_start = ids_start + len(ids_blob)
 
-    output = struct.pack('<IIIIIII',
+    output = struct.pack(
+        '<IIIIIII',
         0x950412de, 0, n,
         orig_table_offset, trans_table_offset,
-        0, 0)
+        0, 0,
+    )
 
     for length, offset in k_offsets:
         output += struct.pack('<II', length, ids_start + offset)

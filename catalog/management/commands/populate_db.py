@@ -3,13 +3,12 @@ Management command: python manage.py populate_db
 Creates sample categories, brands, products and booking data.
 """
 import io
-import os
 
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 from django.utils.text import slugify
 
-from booking.models import Appointment, Service, Specialist
+from booking.models import Service, Specialist
 from catalog.models import Brand, Category, Product
 
 
@@ -118,13 +117,6 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("Database populated successfully!"))
 
     def _create_products(self):
-        colors = {
-            "Skincare":  "#d5a6bd",
-            "Makeup":    "#cc4125",
-            "Haircare":  "#6aa84f",
-            "Perfumery": "#674ea7",
-        }
-
         for cat_name, brand_name, name, desc, price, stock, color in PRODUCTS:
             cat, _ = Category.objects.get_or_create(
                 name=cat_name,

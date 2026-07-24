@@ -43,4 +43,3 @@ class ProductAdmin(TranslationAdmin):
     prepopulated_fields = {
         "slug": ("name",),
     }
-
