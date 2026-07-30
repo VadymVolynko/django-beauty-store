@@ -8,3 +8,4 @@ python manage.py collectstatic --no-input
 python manage.py migrate
 python manage.py populate_db
 python manage.py create_test_user
+python manage.py create_admin_user
