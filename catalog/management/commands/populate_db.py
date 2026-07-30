@@ -128,25 +128,27 @@ class Command(BaseCommand):
             )
 
             slug = slugify(name)
-            if Product.objects.filter(slug=slug).exists():
-                self.stdout.write(f"  skip  {name}")
-                continue
+            product = Product.objects.filter(slug=slug).first()
+            created = product is None
+            if product is None:
+                product = Product(
+                    category=cat,
+                    brand=brand,
+                    name=name,
+                    slug=slug,
+                    description=desc,
+                    price=price,
+                    stock=stock,
+                    is_available=True,
+                )
 
-            product = Product(
-                category=cat,
-                brand=brand,
-                name=name,
-                slug=slug,
-                description=desc,
-                price=price,
-                stock=stock,
-                is_available=True,
-            )
-
+            # Render's disk is wiped on every deploy, but the Postgres data
+            # persists — always (re)write the image file so it exists on
+            # whichever disk is currently serving requests.
             img_data = _make_image(color, brand_name)
             product.image.save(f"{slug}.png", img_data, save=False)
             product.save()
-            self.stdout.write(f"  created  {name}")
+            self.stdout.write(f"  {'created' if created else 'refreshed image for'}  {name}")
 
     def _create_booking_data(self):
         service_objs = {}
@@ -160,16 +162,18 @@ class Command(BaseCommand):
                 self.stdout.write(f"  service  {s_name}")
 
         for sp_name, sp_bio, sp_exp, sp_services in SPECIALISTS:
-            if Specialist.objects.filter(name=sp_name).exists():
-                continue
-            sp = Specialist.objects.create(name=sp_name, bio=sp_bio, experience=sp_exp)
+            sp = Specialist.objects.filter(name=sp_name).first()
+            created = sp is None
+            if sp is None:
+                sp = Specialist(name=sp_name, bio=sp_bio, experience=sp_exp)
 
             img_data = _make_image("#b45309", sp_name.split()[0])
             sp.photo.save(f"{sp_name.lower().replace(' ', '-')}.png", img_data, save=False)
             sp.save()
 
-            for svc_name in sp_services:
-                if svc_name in service_objs:
-                    sp.services.add(service_objs[svc_name])
+            if created:
+                for svc_name in sp_services:
+                    if svc_name in service_objs:
+                        sp.services.add(service_objs[svc_name])
 
-            self.stdout.write(f"  specialist  {sp_name}")
+            self.stdout.write(f"  {'specialist' if created else 'refreshed image for'}  {sp_name}")
