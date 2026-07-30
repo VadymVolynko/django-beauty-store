@@ -1,7 +1,9 @@
+import re
+
 from django.conf import settings
-from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
+from django.views.static import serve
 from accounts.views import owner_dashboard_view, owner_logout_view
 
 urlpatterns = [
@@ -17,8 +19,13 @@ urlpatterns = [
     path("", include("wishlist.urls")),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(
-        settings.MEDIA_URL,
-        document_root=settings.MEDIA_ROOT,
-    )
+# Django's static() helper is a no-op unless DEBUG=True. This project has no
+# S3/CDN, so media (product/specialist images) must be served by Django
+# itself even in production on Render.
+urlpatterns += [
+    re_path(
+        r"^%s(?P<path>.*)$" % re.escape(settings.MEDIA_URL.lstrip("/")),
+        serve,
+        {"document_root": settings.MEDIA_ROOT},
+    ),
+]
