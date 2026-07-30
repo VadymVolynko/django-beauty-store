@@ -299,15 +299,60 @@ SPECIALIST = {
 }
 
 
+# Slugs/names from the old generic placeholder demo data this command used
+# to seed. Deployed environments already have these rows persisted in
+# Postgres from earlier builds; remove them so the storefront converges on
+# the real catalog instead of showing a mix of both.
+LEGACY_PRODUCT_SLUGS = [
+    "soft-moisturising-cream",
+    "revitalift-anti-wrinkle-serum",
+    "micellar-cleansing-water",
+    "fit-me-foundation",
+    "lash-sensational-mascara",
+    "infallible-24h-lipstick",
+    "pro-v-repair-protect-shampoo",
+    "fructis-sleek-shine-conditioner",
+    "black-white-invisible-deodorant",
+    "men-expert-cool-power-shower-gel",
+]
+LEGACY_BRAND_NAMES = ["Nivea", "L'Oréal", "Garnier", "Maybelline", "Pantene"]
+LEGACY_SERVICE_NAMES = [
+    "Deep Cleansing Facial",
+    "Anti-Age Treatment",
+    "Hydration Boost",
+    "Brow & Lash Styling",
+    "Chemical Peeling",
+]
+LEGACY_SPECIALIST_NAMES = ["Sophia Williams", "Olivia Martinez", "Emma Johnson"]
+
+
 class Command(BaseCommand):
     help = "Populate the database with the real portfolio catalog and booking data"
 
     def handle(self, *args, **options):
+        self._cleanup_legacy_demo_data()
         self._create_categories()
         self._create_brands()
         self._create_products()
         self._create_booking_data()
         self.stdout.write(self.style.SUCCESS("Database populated successfully!"))
+
+    def _cleanup_legacy_demo_data(self):
+        deleted, _ = Product.objects.filter(slug__in=LEGACY_PRODUCT_SLUGS).delete()
+        if deleted:
+            self.stdout.write(f"  removed {deleted} legacy demo product row(s)")
+
+        deleted, _ = Brand.objects.filter(name__in=LEGACY_BRAND_NAMES).delete()
+        if deleted:
+            self.stdout.write(f"  removed {deleted} legacy demo brand row(s)")
+
+        deleted, _ = Specialist.objects.filter(name__in=LEGACY_SPECIALIST_NAMES).delete()
+        if deleted:
+            self.stdout.write(f"  removed {deleted} legacy demo specialist row(s)")
+
+        deleted, _ = Service.objects.filter(name_en__in=LEGACY_SERVICE_NAMES).delete()
+        if deleted:
+            self.stdout.write(f"  removed {deleted} legacy demo service row(s)")
 
     def _create_categories(self):
         for name in CATEGORIES:
