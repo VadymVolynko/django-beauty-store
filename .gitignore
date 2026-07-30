@@ -6,6 +6,13 @@ media/*
 media/products/*
 !media/products/portfolio/
 !media/products/portfolio/*.jpg
+!media/brands/
+!media/brands/*.jpg
+!media/brands/*.png
+!media/specialists/
+media/specialists/*
+!media/specialists/gallery/
+!media/specialists/gallery/*.jpg
 __pycache__/
 *.pyc
 .env
