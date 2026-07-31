@@ -18,3 +18,5 @@ __pycache__/
 .env
 .idea/
 .vscode/
+.agents/
+*.log
