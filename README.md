@@ -4,6 +4,8 @@ A full-featured beauty e-commerce & booking platform built with Django — a cos
 
 ## Live Demo
 
+**[https://beauty-store-4jzw.onrender.com](https://beauty-store-4jzw.onrender.com)** — hosted on Render's free tier, so the first request after a period of inactivity can take up to a minute to spin the instance back up. See [Test account for reviewers](#deployment-render) below to sign in.
+
 ![Home page](docs/screenshots/home.png)
 
 ---
@@ -86,7 +88,9 @@ Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser. The storefr
 
 ## Deployment (Render)
 
-The app is ready to deploy on [Render](https://render.com/docs/deploy-django) either via the included `render.yaml` blueprint (New → Blueprint, point it at this repo — provisions a free web service and a free Postgres database) or manually:
+**Live app:** [https://beauty-store-4jzw.onrender.com](https://beauty-store-4jzw.onrender.com)
+
+The app is deployed on [Render](https://render.com/docs/deploy-django) using the included `render.yaml` blueprint (New → Blueprint, point it at this repo — provisions a free web service and a free Postgres database). To deploy your own copy, either use that blueprint or set it up manually:
 
 - **Build command:** `./build.sh` (installs dependencies, runs `collectstatic`, runs `migrate`, seeds sample catalog/booking data, and creates/resets a standing test user)
 - **Start command:** `gunicorn config.wsgi:application`
